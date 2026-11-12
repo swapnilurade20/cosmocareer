@@ -1,0 +1,9 @@
+import {NextRequest,NextResponse} from "next/server";
+import mongoose from "mongoose";
+import {z} from "zod";
+import {requirePermission} from "@/lib/admin";
+import Course from "@/models/Course";
+import Quiz from "@/models/Quiz";
+const schema=z.object({title:z.string().trim().min(2).max(160),moduleId:z.string().optional(),questions:z.array(z.object({prompt:z.string().trim().min(2).max(1000),options:z.array(z.string().trim().min(1).max(300)).min(2).max(6),correctOption:z.number().int().min(0),explanation:z.string().max(1000).default("")}).refine(q=>q.correctOption<q.options.length)).min(1).max(100),passPercent:z.number().min(0).max(100).default(70),attemptsAllowed:z.number().int().min(1).max(20).default(3),isPublished:z.boolean().default(false)});
+export async function GET(req:NextRequest,{params}:{params:Promise<{id:string}>}){const auth=await requirePermission(req,"courses.read");if("error" in auth)return auth.error;const {id}=await params;if(!mongoose.isValidObjectId(id))return NextResponse.json({error:"Invalid course."},{status:400});const quizzes=await Quiz.find({courseId:id}).select("-questions.correctOption").lean();return NextResponse.json({quizzes});}
+export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){const auth=await requirePermission(req,"courses.manage");if("error" in auth)return auth.error;const {id}=await params;if(!mongoose.isValidObjectId(id)||!await Course.exists({_id:id}))return NextResponse.json({error:"Course not found."},{status:404});const parsed=schema.safeParse(await req.json().catch(()=>null));if(!parsed.success)return NextResponse.json({error:"Invalid quiz. Check questions and correct option indexes."},{status:400});const quiz=await Quiz.create({...parsed.data,courseId:id,createdBy:auth.session.userId});return NextResponse.json({quiz},{status:201});}
