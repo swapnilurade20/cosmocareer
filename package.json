@@ -27,6 +27,10 @@
     "tailwindcss": "^4.1.0",
     "@types/bcryptjs": "^2.4.6",
     "tsx": "^4.20.5",
-    "dotenv": "^16.6.1"
+    "dotenv": "^16.6.1",
+    "postcss": "^8.5.32"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   }
 }
