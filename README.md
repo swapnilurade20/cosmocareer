@@ -105,3 +105,15 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - API access requires an active staff account with the `students.manage` permission; the admin role is permitted.
 - This is an initial internal CRM: lead import, reassignment UI, reminders, email/WhatsApp notifications, appointment booking, consent workflows and analytics remain future work.
 - Validate the TypeScript build, permissions and real MongoDB workflows before production use.
+
+
+## Notifications milestone
+- Authenticated notification inbox at `/notifications`, with unread counts and mark-read / mark-all-read actions.
+- MongoDB notification records are private to the receiving account.
+- Students receive an in-app notification when a placement application is submitted.
+- Students receive an in-app notification when an employer changes their application stage.
+- Email delivery uses the Resend API when `RESEND_API_KEY` and `RESEND_FROM_EMAIL` are configured; in-app notifications continue when email is not configured.
+- Set `NEXT_PUBLIC_APP_URL` to the deployed site URL so email links point to the correct website.
+- Email delivery failures are logged and do not block application submission or employer updates.
+- WhatsApp delivery via MSG91 is not yet connected; the existing MSG91 key alone is insufficient without approved WhatsApp sender/template configuration and verified recipient consent.
+- Configure and verify the sending domain in Resend before enabling production email. Add rate limits, delivery logs, unsubscribe/preferences and end-to-end tests before launch.
