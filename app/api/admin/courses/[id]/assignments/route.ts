@@ -1,0 +1,9 @@
+import {NextRequest,NextResponse} from "next/server";
+import mongoose from "mongoose";
+import {z} from "zod";
+import {requirePermission} from "@/lib/admin";
+import Course from "@/models/Course";
+import Assignment from "@/models/Assignment";
+const schema=z.object({title:z.string().trim().min(2).max(160),instructions:z.string().trim().min(5).max(10000),moduleId:z.string().optional(),dueAt:z.string().datetime().optional(),maxScore:z.number().int().min(1).max(1000).default(100),isPublished:z.boolean().default(false)});
+export async function GET(req:NextRequest,{params}:{params:Promise<{id:string}>}){const auth=await requirePermission(req,"courses.read");if("error" in auth)return auth.error;const {id}=await params;if(!mongoose.isValidObjectId(id))return NextResponse.json({error:"Invalid course."},{status:400});const assignments=await Assignment.find({courseId:id}).sort({createdAt:-1}).lean();return NextResponse.json({assignments});}
+export async function POST(req:NextRequest,{params}:{params:Promise<{id:string}>}){const auth=await requirePermission(req,"courses.manage");if("error" in auth)return auth.error;const {id}=await params;if(!mongoose.isValidObjectId(id)||!await Course.exists({_id:id}))return NextResponse.json({error:"Course not found."},{status:404});const parsed=schema.safeParse(await req.json().catch(()=>null));if(!parsed.success)return NextResponse.json({error:"Invalid assignment details."},{status:400});const data=parsed.data;const assignment=await Assignment.create({courseId:id,title:data.title,instructions:data.instructions,moduleId:data.moduleId&&mongoose.isValidObjectId(data.moduleId)?data.moduleId:undefined,dueAt:data.dueAt?new Date(data.dueAt):undefined,maxScore:data.maxScore,isPublished:data.isPublished,createdBy:auth.session.userId});return NextResponse.json({assignment},{status:201});}
