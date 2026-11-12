@@ -26,5 +26,13 @@ A career development and practical learning platform, with a second division for
 
 To create the first administrator, set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (minimum 14 characters) and optionally `ADMIN_NAME` in your local environment, then run `npm run seed:admin`. Never commit real credentials or environment files.
 
+## Admin foundation
+- Admin-only dashboard at `/admin`.
+- Account directory with role and active/inactive controls.
+- Configurable staff permission assignments for teachers, employees and counsellors.
+- Course creation, draft/published state and catalogue management.
+- Audit log records for account and course changes.
+- Server-side admin checks revalidate the current account against MongoDB; staff permission helper is available for subsequent staff APIs.
+
 ## Project status
 This is an early foundation, not a production-ready launch. Email verification, password reset, rate limiting, staff invitation and permission management, audit logging, automated tests, and production security review are still required. The career assessment, course catalogue, LMS, placement workflows, bilingual CMS, service orders and payment integration are planned follow-on modules. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
