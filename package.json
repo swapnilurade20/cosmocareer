@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:admin": "tsx scripts/create-admin.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.0",
@@ -24,6 +25,7 @@
     "@types/react-dom": "^19.1.7",
     "typescript": "^5.9.2",
     "tailwindcss": "^4.1.0",
-    "@types/bcryptjs": "^2.4.6"
+    "@types/bcryptjs": "^2.4.6",
+    "tsx": "^4.20.5"
   }
 }
