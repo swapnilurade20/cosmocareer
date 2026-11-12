@@ -59,7 +59,7 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Public certificate verification endpoint and learner-facing verification link.
 
 ## Remaining work and release safeguards
-- A generated QR graphic and downloadable/printable certificate layout are not yet included; certificates currently provide a unique verification URL/code.
+- Certificate verification QR images are rendered through a third-party QR image service; use a self-hosted QR generator for a stricter privacy/availability requirement. A downloadable/printable certificate layout is still pending.
 - Assignment attachment storage/upload is not integrated; current learner submissions support written work (and the API accepts a URL when submitted directly).
 - Batch, attendance, grading and quiz flows need end-to-end testing with real accounts and MongoDB.
 - Staff permissions are checked on the new staff routes; map roles to actual course/batch assignments before allowing staff to manage only their own classes.
