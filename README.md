@@ -78,3 +78,20 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Resume uploads are not implemented; applicants currently provide a URL. Add private object storage, file-type validation, malware scanning and access-controlled downloads before handling uploaded CVs.
 - Employer self-service accounts, automated email/WhatsApp notifications, calendar invitations, interview feedback forms, placement eligibility rules and placement outcome analytics are future work.
 - This milestone is code-complete at repository level but has not yet passed a full production build or live MongoDB integration test.
+
+## Employer portal milestone
+- Employer accounts are provisioned by an administrator; public signup remains student-only.
+- Employer company profiles require administrator verification before job creation.
+- Employer portal at `/employer` supports company profile submission, vacancy drafting and applicant review.
+- Employer job listings are owner-scoped; employers can only view their own vacancies and applicants.
+- Employer candidate updates support screening, interview, offer, hire and rejection stages, with interview timestamps and internal notes.
+- Admin employer review at `/admin/employers` approves or rejects company profiles.
+- Admin placement CRM includes a job review queue and publication controls. Employer-created jobs remain drafts until staff approval.
+- Employer role is assignable by administrators from the user management screen.
+
+## Employer release safeguards
+- Employer accounts are not self-registered; an administrator must assign the employer role to an existing account.
+- Employer job publication requires both an approved company profile and a separate admin publication action.
+- Employer ownership checks are enforced on vacancy and candidate endpoints.
+- Automated email/WhatsApp alerts, calendar invitations, employer identity/KYC checks, resume file upload/storage, and legal/compliance workflows are not yet integrated.
+- Full build, automated tests and live MongoDB end-to-end testing are still required before production.
