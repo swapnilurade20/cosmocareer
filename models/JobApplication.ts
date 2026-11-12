@@ -1,0 +1,6 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export type ApplicationStatus="applied"|"screening"|"interview"|"offered"|"hired"|"rejected"|"withdrawn";
+export interface IJobApplication{jobId:mongoose.Types.ObjectId;studentId:mongoose.Types.ObjectId;resumeUrl?:string;coverLetter?:string;status:ApplicationStatus;staffNotes?:string;interviewAt?:Date;statusHistory:{status:ApplicationStatus;note?:string;changedBy:string;changedAt:Date}[]}
+const schema=new Schema<IJobApplication>({jobId:{type:Schema.Types.ObjectId,ref:"PlacementJob",required:true,index:true},studentId:{type:Schema.Types.ObjectId,ref:"User",required:true,index:true},resumeUrl:{type:String,maxlength:1500},coverLetter:{type:String,maxlength:5000},status:{type:String,enum:["applied","screening","interview","offered","hired","rejected","withdrawn"],default:"applied"},staffNotes:{type:String,maxlength:5000},interviewAt:Date,statusHistory:[{status:{type:String,enum:["applied","screening","interview","offered","hired","rejected","withdrawn"]},note:String,changedBy:String,changedAt:{type:Date,default:Date.now}}]},{timestamps:true});
+schema.index({jobId:1,studentId:1},{unique:true});
+const JobApplication:Model<IJobApplication>=mongoose.models.JobApplication||mongoose.model<IJobApplication>("JobApplication",schema);export default JobApplication;
