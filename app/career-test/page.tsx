@@ -16,7 +16,7 @@ const groups:Record<Area,string[]>={
   Care:["I feel motivated by work that improves people's wellbeing.","I am patient when someone needs extra support.","I enjoy understanding health, behaviour or wellbeing topics.","I can stay thoughtful in emotionally demanding situations.","I like helping people build healthier habits.","I am interested in psychology and human behaviour.","I value empathy and responsible decision-making.","I enjoy supporting children, families or communities.","I can respect privacy and handle sensitive information carefully.","I would find purpose in a service-oriented career."],
   Entrepreneurship:["I often think about starting a project or business.","I am comfortable taking thoughtful risks after research.","I enjoy turning an idea into a practical plan.","I like taking responsibility for outcomes.","I can keep working when a project faces setbacks.","I enjoy spotting unmet needs and possible solutions.","I like testing a small version of an idea before scaling it.","I am interested in pricing, customers and business models.","I enjoy finding resources and people to make an idea happen.","I would like to build something of my own."]
 };
-const questions:Question[]=Object.entries(groups).flatMap(([area,items])=>items.map(text=>({area:area as Area,text})));
+const questions:Question[]=Object.entries(groups).flatMap(([area,items])=>items.slice(0,6).map(text=>({area:area as Area,text})));
 const careers:Record<Area,{roles:string[];description:string;courses:string[]}> = {
  Technology:{roles:["Software Developer","Web Developer","AI / Machine Learning Associate","Cybersecurity Analyst","Cloud Support Engineer"],description:"You may enjoy building, maintaining and improving digital systems. Try beginner coding projects before choosing a specialisation.",courses:["Web development","Programming fundamentals","AI tools and automation"]},
  Business:{roles:["Business Analyst","Digital Marketing Executive","Product Coordinator","Operations Executive","Sales and Growth Associate"],description:"You may enjoy helping organisations understand customers, improve processes and reach goals.",courses:["Business analysis","Digital marketing","Sales and project management"]},
@@ -36,12 +36,12 @@ export default function CareerTestPage(){
  const [finished,setFinished]=useState(false);
  const answered=answers.filter(Boolean).length;
  const progress=Math.round(answered/questions.length*100);
- const results=useMemo(()=>Object.keys(groups).map(area=>{const key=area as Area;const qs=questions.map((q,i)=>q.area===key?answers[i]:0);const total=qs.reduce((a,b)=>a+b,0);return {area:key,total,max:50,percent:Math.round(total/50*100)}}).sort((a,b)=>b.total-a.total),[answers]);
+ const results=useMemo(()=>Object.keys(groups).map(area=>{const key=area as Area;const qs=questions.map((q,i)=>q.area===key?answers[i]:0);const total=qs.reduce((a,b)=>a+b,0);return {area:key,total,max:30,percent:Math.round(total/30*100)}}).sort((a,b)=>b.total-a.total),[answers]);
  const current=questions[index];
  const choose=(value:number)=>setAnswers(old=>old.map((a,i)=>i===index?value:a));
  const restart=()=>{setAnswers(Array(questions.length).fill(0));setIndex(0);setFinished(false)};
  return <main>
-  <section className="hero"><div className="container"><span className="tag">COSMOCAREER • CAREER DISCOVERY</span><h1>Discover career paths that match your interests.</h1><p>Answer 100 short statements about what you enjoy and how you like to work. Get interest-area results, career ideas and suggested learning paths.</p><p style={{fontSize:14,color:"#c7d2fe"}}>About 15–20 minutes · No right or wrong answers · No AI required</p></div></section>
+  <section className="hero"><div className="container"><span className="tag">COSMOCAREER • CAREER DISCOVERY</span><h1>Discover career paths that match your interests.</h1><p>Answer 60 short statements about what you enjoy and how you like to work. Get interest-area results, career ideas and suggested learning paths.</p><p style={{fontSize:14,color:"#c7d2fe"}}>About 15–20 minutes · No right or wrong answers · No AI required</p></div></section>
   <section className="section"><div className="container" style={{maxWidth:850}}>
    {!finished?<div className="card">
     <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">CAREER INTEREST ASSESSMENT</span><b>Question {index+1} of {questions.length}</b></div>
