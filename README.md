@@ -133,3 +133,17 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Payment values in the CRM are manual reconciliation records only; verify against the payment provider before recording them as received.
 - Reference materials are submitted as URLs; private file uploads, virus scanning and secure object storage are not integrated.
 - Validate the full TypeScript build, permission boundaries, MongoDB workflows, notification delivery and customer/admin journeys before production launch.
+
+
+## 40-day flagship course progression
+
+The learner dashboard links each active enrolment to `/learning/programme?courseId=<course-id>`. The programme API reports lesson completion, published quiz attempts, project submissions and teacher feedback, batch attendance, resume submission, final-assessment status and placement-readiness milestones.
+
+- Project submissions are limited to three attempts. Staff with `enrollments.manage` can review them at `/admin/assignment-submissions` and approve or request a revision.
+- The default quiz pass mark is 60%; the quiz model retains a configurable attempt limit (default three). Existing quiz records keep their saved pass mark and attempt settings until an administrator edits them.
+- Learners submit a resume or portfolio URL from their programme page. Staff can record final assessment completion, mock interview count, action-plan completion and placement-support duration at `/admin/learning-milestones`.
+- The placement-ready badge condition is at least three mock interviews plus a completed action plan.
+- Certificate issuance checks lesson completion, all published quizzes passed, all published projects approved, submitted resume/portfolio, final assessment completion and (when batch attendance records exist) at least 75% attendance.
+- Programme tracking endpoints: `GET /api/learning/programme?courseId=...`, `PATCH /api/learning/programme/milestones`, `GET/PATCH /api/admin/learning-milestones`, and `GET/PATCH /api/admin/assignment-submissions`.
+
+Operational notes: final assessment and interview outcomes must be entered by authorised staff; the platform does not automatically conduct mock interviews. Placement support duration defaults to three months for new milestone records and can be changed by staff. The live payment/EMI checkout remains a separate integration and is not enabled by these changes.
