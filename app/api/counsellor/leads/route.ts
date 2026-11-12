@@ -1,0 +1,7 @@
+import {NextRequest,NextResponse} from "next/server";
+import mongoose from "mongoose";
+import {connectDB} from "@/lib/db";
+import {requirePermission} from "@/lib/admin";
+import CounsellorLead from "@/models/CounsellorLead";
+export async function GET(req:NextRequest){const auth=await requirePermission(req,"students.manage");if("error" in auth)return auth.error;const filter=auth.user.role==="admin"?{}:{assignedTo:new mongoose.Types.ObjectId(auth.session.userId)};const leads=await CounsellorLead.find(filter).populate("assignedTo","name email").sort({nextFollowUpAt:1,updatedAt:-1}).limit(500).lean();return NextResponse.json({leads})}
+export async function POST(req:NextRequest){const auth=await requirePermission(req,"students.manage");if("error" in auth)return auth.error;const body=await req.json();const name=String(body.name||"").trim(),phone=String(body.phone||"").trim();if(!name||!phone)return NextResponse.json({error:"Name and phone are required."},{status:400});if(phone.length>20||name.length>100)return NextResponse.json({error:"Name or phone is too long."},{status:400});await connectDB();const lead=await CounsellorLead.create({name,email:body.email?String(body.email).trim().toLowerCase():undefined,phone,source:String(body.source||"website").slice(0,80),interest:String(body.interest||"").slice(0,160),assignedTo:auth.user._id,createdBy:auth.user._id});return NextResponse.json({lead},{status:201})}
