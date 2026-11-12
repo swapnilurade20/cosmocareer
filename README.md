@@ -95,3 +95,13 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Employer ownership checks are enforced on vacancy and candidate endpoints.
 - Automated email/WhatsApp alerts, calendar invitations, employer identity/KYC checks, resume file upload/storage, and legal/compliance workflows are not yet integrated.
 - Full build, automated tests and live MongoDB end-to-end testing are still required before production.
+
+
+## Counsellor CRM milestone
+- Counsellor workspace at `/counsellor` for capturing prospective student enquiries.
+- Leads store contact details, enquiry source, course interest, pipeline stage, assigned counsellor and next follow-up date.
+- Counsellors see only leads assigned to their own account; administrators can review all leads through the same workspace.
+- Counsellors can update the admission pipeline and append timestamped counselling notes.
+- API access requires an active staff account with the `students.manage` permission; the admin role is permitted.
+- This is an initial internal CRM: lead import, reassignment UI, reminders, email/WhatsApp notifications, appointment booking, consent workflows and analytics remain future work.
+- Validate the TypeScript build, permissions and real MongoDB workflows before production use.
