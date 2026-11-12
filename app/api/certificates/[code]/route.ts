@@ -1,0 +1,4 @@
+import {NextRequest,NextResponse} from "next/server";
+import {connectDB} from "@/lib/db";
+import Certificate from "@/models/Certificate";
+export async function GET(req:NextRequest,{params}:{params:Promise<{code:string}>}){await connectDB();const {code}=await params;const certificate=await Certificate.findOne({verificationCode:code,status:"valid"}).populate("studentId","name").populate("courseId","title").lean();if(!certificate)return NextResponse.json({valid:false,error:"Certificate not found or revoked."},{status:404});const student=certificate.studentId as unknown as {name:string};const course=certificate.courseId as unknown as {title:string};return NextResponse.json({valid:true,certificateNumber:certificate.certificateNumber,studentName:student.name,courseTitle:course.title,issuedAt:certificate.issuedAt});}
