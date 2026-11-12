@@ -26,6 +26,7 @@
     "typescript": "^5.9.2",
     "tailwindcss": "^4.1.0",
     "@types/bcryptjs": "^2.4.6",
-    "tsx": "^4.20.5"
+    "tsx": "^4.20.5",
+    "dotenv": "^16.6.1"
   }
 }
