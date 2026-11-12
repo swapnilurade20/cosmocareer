@@ -1,0 +1,5 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export interface IProgrammeRecord{studentId:mongoose.Types.ObjectId;courseId:mongoose.Types.ObjectId;resumeSubmitted:boolean;resumeUrl:string;finalAssessmentDone:boolean;finalAssessmentScore?:number;mockInterviewCount:number;actionPlanCompleted:boolean;placementSupportMonths:number}
+const schema=new Schema<IProgrammeRecord>({studentId:{type:Schema.Types.ObjectId,ref:"User",required:true,index:true},courseId:{type:Schema.Types.ObjectId,ref:"Course",required:true,index:true},resumeSubmitted:{type:Boolean,default:false},resumeUrl:{type:String,default:"",maxlength:1000},finalAssessmentDone:{type:Boolean,default:false},finalAssessmentScore:{type:Number,min:0,max:100},mockInterviewCount:{type:Number,min:0,default:0},actionPlanCompleted:{type:Boolean,default:false},placementSupportMonths:{type:Number,min:0,default:3}},{timestamps:true});
+schema.index({studentId:1,courseId:1},{unique:true});
+const ProgrammeRecord:Model<IProgrammeRecord>=mongoose.models.ProgrammeRecord||mongoose.model<IProgrammeRecord>("ProgrammeRecord",schema);export default ProgrammeRecord;
