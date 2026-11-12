@@ -4,7 +4,7 @@ import User from "@/models/User";
 function escapeHtml(value:string){return value.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]||c))}
 export async function notifyUser(input:{userId:mongoose.Types.ObjectId|string;title:string;message:string;href?:string;category?:"placement"|"learning"|"account"|"general";email?:boolean}){
  const id=input.userId;
- const notification=await Notification.create({userId:id,title:input.title.slice(0,140),message:input.message.slice(0,1000),href:input.href,category:input.category||"general"});
+ let notification=null;try{notification=await Notification.create({userId:id,title:input.title.slice(0,140),message:input.message.slice(0,1000),href:input.href,category:input.category||"general"});}catch(error){console.error("In-app notification creation failed",error);return null;}
  if(input.email===false||!process.env.RESEND_API_KEY||!process.env.RESEND_FROM_EMAIL)return notification;
  try{
   const user=await User.findById(id).select("name email").lean();
