@@ -117,3 +117,19 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Email delivery failures are logged and do not block application submission or employer updates.
 - WhatsApp delivery via MSG91 is not yet connected; the existing MSG91 key alone is insufficient without approved WhatsApp sender/template configuration and verified recipient consent.
 - Configure and verify the sending domain in Resend before enabling production email. Add rate limits, delivery logs, unsubscribe/preferences and end-to-end tests before launch.
+
+
+## Digital services CRM milestone
+- Public service catalogue at `/services`; only published services are shown.
+- Admin catalogue management at `/admin/services` supports service descriptions, categories, deliverables, turnaround estimates, prices and advance amounts.
+- Signed-in customers can submit a project brief, contact phone, preferred deadline and reference URLs.
+- Customer order history at `/service-orders` is scoped to the signed-in account and excludes internal staff notes and payment reconciliation values.
+- Admin/staff CRM at `/admin/service-orders` supports the order pipeline, team assignment, internal notes and payment reconciliation records.
+- Order status updates create in-app notifications and optional Resend email notifications.
+- Service-management APIs require the `services.manage` permission; admin role is allowed.
+
+## Digital services payment and launch safeguards
+- The request form does not collect money. Razorpay checkout, server-side order creation, signature verification and webhook reconciliation are not implemented in this milestone.
+- Payment values in the CRM are manual reconciliation records only; verify against the payment provider before recording them as received.
+- Reference materials are submitted as URLs; private file uploads, virus scanning and secure object storage are not integrated.
+- Validate the full TypeScript build, permission boundaries, MongoDB workflows, notification delivery and customer/admin journeys before production launch.
