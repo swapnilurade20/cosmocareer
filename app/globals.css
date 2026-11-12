@@ -7,3 +7,5 @@
 .course-syllabus-grid article{padding:16px;border-radius:16px;background:#fafbff;border:1px solid #eaecf0}.course-syllabus-grid h3{margin-top:0}.course-day-list{padding-left:20px;display:grid;gap:10px}.course-day-list p{margin:3px 0 0}
 .course-requirements ul{padding-left:22px;line-height:1.85}.placement-bottom{margin-top:22px;padding:30px;border-radius:22px;background:linear-gradient(125deg,#171a46,#4844a9);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}.placement-bottom p{max-width:760px;color:#e0e2ff;line-height:1.7}.placement-bottom small{display:block;color:#d0d2ef;line-height:1.6}.placement-bottom .tag{background:#ffffff20;color:#fff}
 @media(max-width:700px){.timeline-five li{grid-template-columns:36px 1fr;padding:13px}.timeline-five li>span{width:34px;height:34px}.placement-bottom{padding:22px}}
+
+.course-card{overflow:hidden;padding:0 0 24px}.course-card>.tag,.course-card>h3,.course-card>p,.course-card>ul,.course-card>div{margin-left:22px;margin-right:22px}.course-card-art{display:block;width:100%;height:150px;object-fit:cover;margin-bottom:20px}
