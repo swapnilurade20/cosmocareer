@@ -45,7 +45,6 @@ export const metadata:Metadata={
   metadataBase:new URL(siteUrl),
   title:{default:"CosmoCareer | Career Discovery, Courses & Career Growth",template:"%s | CosmoCareer"},
   description:"Explore career options with a 60-question career test, build practical skills through courses, and discover placement resources and creative services.",
-  alternates:{canonical:"/"},
   openGraph:{type:"website",url:siteUrl,title:"CosmoCareer | Learn. Create. Grow.",description:"Career discovery, practical learning, placement resources and creative services.",siteName:"CosmoCareer"},
   robots:{index:true,follow:true}
 };
