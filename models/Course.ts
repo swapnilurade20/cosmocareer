@@ -1,0 +1,5 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export interface ICourse{title:string;slug:string;shortDescription:string;description:string;category:string;level:"beginner"|"intermediate"|"advanced";durationWeeks:number;price:number;language:"English"|"Hindi"|"Bilingual";isPublished:boolean;createdBy:string}
+const schema=new Schema<ICourse>({title:{type:String,required:true,trim:true,maxlength:120},slug:{type:String,required:true,unique:true,lowercase:true,trim:true},shortDescription:{type:String,required:true,maxlength:240},description:{type:String,default:""},category:{type:String,required:true},level:{type:String,enum:["beginner","intermediate","advanced"],default:"beginner"},durationWeeks:{type:Number,min:1,max:104,default:8},price:{type:Number,min:0,default:0},language:{type:String,enum:["English","Hindi","Bilingual"],default:"Bilingual"},isPublished:{type:Boolean,default:false},createdBy:{type:String,required:true}}, {timestamps:true});
+const Course:Model<ICourse>=mongoose.models.Course||mongoose.model<ICourse>("Course",schema);
+export default Course;
