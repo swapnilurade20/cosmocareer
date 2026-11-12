@@ -1,0 +1,5 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export interface IService{name:string;slug:string;category:string;shortDescription:string;description:string;deliverables:string[];turnaroundDays:number;price:number;advanceAmount:number;isPublished:boolean}
+const schema=new Schema<IService>({name:{type:String,required:true,trim:true,maxlength:120},slug:{type:String,required:true,unique:true,lowercase:true,trim:true},category:{type:String,required:true,trim:true,maxlength:80},shortDescription:{type:String,required:true,maxlength:240},description:{type:String,default:"",maxlength:5000},deliverables:{type:[String],default:[]},turnaroundDays:{type:Number,default:7,min:1,max:365},price:{type:Number,required:true,min:0},advanceAmount:{type:Number,required:true,min:0},isPublished:{type:Boolean,default:false}},{timestamps:true});
+schema.index({isPublished:1,category:1});
+const Service:Model<IService>=mongoose.models.Service||mongoose.model<IService>("Service",schema);export default Service;
