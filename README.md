@@ -16,23 +16,32 @@ A career development and practical learning platform, with a second division for
 4. Set `MONGODB_URI` and a unique `AUTH_SECRET` (at least 32 characters).
 5. Run `npm run dev`.
 
-## Authentication currently implemented
+## Authentication
 - Learner self-registration (public registration always creates the student role).
 - Email/password login and logout.
 - Seven-day HTTP-only session cookie.
 - Current-user endpoint.
 - Protected dashboard and role-checked admin route.
-- First-admin bootstrap script; it does not create duplicate admin accounts.
-
-To create the first administrator, set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (minimum 14 characters) and optionally `ADMIN_NAME` in your local environment, then run `npm run seed:admin`. Never commit real credentials or environment files.
+- First-admin bootstrap script. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (minimum 14 characters) and optionally `ADMIN_NAME`, then run `npm run seed:admin`.
 
 ## Admin foundation
 - Admin-only dashboard at `/admin`.
 - Account directory with role and active/inactive controls.
-- Configurable staff permission assignments for teachers, employees and counsellors.
+- Configurable staff permission assignments.
 - Course creation, draft/published state and catalogue management.
+- Course curriculum builder at `/admin/courses/[courseId]` for modules and lessons.
 - Audit log records for account and course changes.
-- Server-side admin checks revalidate the current account against MongoDB; staff permission helper is available for subsequent staff APIs.
 
-## Project status
-This is an early foundation, not a production-ready launch. Email verification, password reset, rate limiting, staff invitation and permission management, audit logging, automated tests, and production security review are still required. The career assessment, course catalogue, LMS, placement workflows, bilingual CMS, service orders and payment integration are planned follow-on modules. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
+## LMS foundation
+- MongoDB models for course modules, nested lessons, enrolments, lesson progress, assignments and quizzes.
+- Admin APIs to create modules and lessons, including preview lessons and video URLs.
+- Public published-course learning page at `/courses/[slug]`.
+- Student enrolment API for free published courses; paid enrolment is blocked until secure checkout exists.
+- Enrolled students can access lesson video URLs; preview lessons are visible to visitors.
+- Lesson progress is saved through a server-side API and a lesson is marked complete at 90% watched.
+- Student dashboard shows active courses and lesson progress summaries.
+
+## Important implementation status
+This is a development foundation, not a production-ready LMS. Assignment and quiz schemas are present, but submission, grading and quiz-attempt APIs/UI are not yet implemented. The video player currently supports direct video URLs; managed video hosting, signed playback, captions and adaptive streaming are not connected. Progress is saved on video time updates (approximately every 10 seconds); validate browser/device behaviour before launch.
+
+Email verification, password reset, rate limiting, staff invitation and scoped permission enforcement, automated tests, build verification, audit review and production security review are still required. Attendance, certificates with QR verification, batch management, payment processing, placement workflows, bilingual CMS and service orders remain future modules. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
