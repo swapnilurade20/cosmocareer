@@ -44,7 +44,7 @@ A career development and practical learning platform, with a second division for
 ## Important implementation status
 This is a development foundation, not a production-ready LMS. Assignment and quiz schemas are present, but submission, grading and quiz-attempt APIs/UI are not yet implemented. The video player currently supports direct video URLs; managed video hosting, signed playback, captions and adaptive streaming are not connected. Progress is saved on video time updates (approximately every 10 seconds); validate browser/device behaviour before launch.
 
-Email verification, password reset, rate limiting, staff invitation and scoped permission enforcement, automated tests, build verification, audit review and production security review are still required. Attendance, certificates with QR verification, batch management, payment processing, placement workflows, bilingual CMS and service orders remain future modules. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
+Email verification, password reset, rate limiting, staff invitation and scoped permission enforcement, automated tests, build verification, audit review and production security review are still required. Secure payment processing and a bilingual CMS remain future work. Digital service order intake and CRM are implemented as described below. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
 
 ## LMS assessments and operations milestone
 - Quiz authoring API and admin builder with multiple-choice questions, pass marks and attempt limits.
