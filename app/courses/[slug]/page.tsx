@@ -1,5 +1,5 @@
-import {courseGuides} from "@/app/course-guides";
 "use client";
+import {courseGuides} from "@/app/course-guides";
 import {useEffect,useRef,useState} from "react";
 import {useParams,useRouter} from "next/navigation";
 type Lesson={_id:string;title:string;description:string;videoUrl:string;durationMinutes:number;isPreview:boolean;isCompleted?:boolean};
