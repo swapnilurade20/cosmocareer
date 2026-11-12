@@ -4,5 +4,5 @@ import Course from "@/models/Course";
 export async function GET(){
  await connectDB();
  const courses=await Course.find({isPublished:true}).select("title slug shortDescription description category level durationWeeks price language").sort({createdAt:-1}).lean();
- return NextResponse.json({courses},{headers:{"Cache-Control":"no-store"}});
+ const flagship=new Set(["video-editing","content-creator","ai-video-creation"]);\n const displayCourses=courses.map(course=>flagship.has(course.slug)?{...course,price:30000,durationWeeks:6,language:"Bilingual"}:course);\n return NextResponse.json({courses:displayCourses},{headers:{"Cache-Control":"no-store"}});
 }
