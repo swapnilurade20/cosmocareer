@@ -1,0 +1,10 @@
+import {NextRequest,NextResponse} from "next/server";
+import {randomBytes} from "node:crypto";
+import mongoose from "mongoose";
+import {requireLearner} from "@/lib/learner";
+import Course from "@/models/Course";
+import Enrollment from "@/models/Enrollment";
+import CourseModule from "@/models/CourseModule";
+import LessonProgress from "@/models/LessonProgress";
+import Certificate from "@/models/Certificate";
+export async function POST(req:NextRequest){const auth=await requireLearner(req);if("error" in auth)return auth.error;const body=await req.json().catch(()=>({}));const courseId=typeof body.courseId==="string"?body.courseId:"";if(!mongoose.isValidObjectId(courseId))return NextResponse.json({error:"Valid courseId required."},{status:400});const course=await Course.findOne({_id:courseId,isPublished:true}).select("_id title");if(!course||!await Enrollment.exists({studentId:auth.user._id,courseId,status:"active"}))return NextResponse.json({error:"Active course enrolment required."},{status:403});const modules=await CourseModule.find({courseId}).select("lessons._id").lean();const lessonIds=modules.flatMap(m=>m.lessons.map(l=>String(l._id)));if(lessonIds.length===0)return NextResponse.json({error:"Course has no lessons to certify."},{status:409});const done=await LessonProgress.countDocuments({studentId:auth.user._id,courseId,lessonId:{$in:lessonIds},completed:true});if(done<lessonIds.length)return NextResponse.json({error:"Complete every course lesson before requesting a certificate.",completed:done,total:lessonIds.length},{status:409});let certificate=await Certificate.findOne({studentId:auth.user._id,courseId});if(!certificate)certificate=await Certificate.create({studentId:auth.user._id,courseId,certificateNumber:"CC-"+Date.now().toString(36).toUpperCase()+"-"+randomBytes(3).toString("hex").toUpperCase(),verificationCode:randomBytes(24).toString("hex")});return NextResponse.json({certificate:{certificateNumber:certificate.certificateNumber,issuedAt:certificate.issuedAt,verificationUrl:new URL("/verify-certificate/"+certificate.verificationCode,req.nextUrl.origin).toString()}});}
