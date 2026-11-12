@@ -45,3 +45,22 @@ A career development and practical learning platform, with a second division for
 This is a development foundation, not a production-ready LMS. Assignment and quiz schemas are present, but submission, grading and quiz-attempt APIs/UI are not yet implemented. The video player currently supports direct video URLs; managed video hosting, signed playback, captions and adaptive streaming are not connected. Progress is saved on video time updates (approximately every 10 seconds); validate browser/device behaviour before launch.
 
 Email verification, password reset, rate limiting, staff invitation and scoped permission enforcement, automated tests, build verification, audit review and production security review are still required. Attendance, certificates with QR verification, batch management, payment processing, placement workflows, bilingual CMS and service orders remain future modules. Do not accept live payments until server-side order creation, signature and webhook verification, refunds and reconciliation are implemented and tested.
+
+## LMS assessments and operations milestone
+- Quiz authoring API and admin builder with multiple-choice questions, pass marks and attempt limits.
+- Learner quiz page; correct answers are withheld until an attempt is submitted.
+- Quiz attempt records and automatic scoring.
+- Assignment authoring and publication for each course.
+- Student written assignment submissions and resubmissions.
+- Staff submission review and grading with score validation and feedback.
+- Batch creation, course-linked student enrolment and batch roster management.
+- Staff attendance marking with present, absent, late and excused states.
+- Certificate issue endpoint that checks completion of all course lessons.
+- Public certificate verification endpoint and learner-facing verification link.
+
+## Remaining work and release safeguards
+- A generated QR graphic and downloadable/printable certificate layout are not yet included; certificates currently provide a unique verification URL/code.
+- Assignment attachment storage/upload is not integrated; current learner submissions support written work (and the API accepts a URL when submitted directly).
+- Batch, attendance, grading and quiz flows need end-to-end testing with real accounts and MongoDB.
+- Staff permissions are checked on the new staff routes; map roles to actual course/batch assignments before allowing staff to manage only their own classes.
+- Build, lint, automated tests, rate limits, file scanning, and security review must be completed before production.
