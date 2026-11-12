@@ -1,0 +1,2 @@
+import {NextRequest,NextResponse} from "next/server";import {requireAdmin} from "@/lib/admin";import EmployerProfile from "@/models/EmployerProfile";
+export async function GET(req:NextRequest){const auth=await requireAdmin(req);if("error" in auth)return auth.error;const profiles=await EmployerProfile.find().populate("ownerId","name email phone isActive").sort({createdAt:-1}).lean();return NextResponse.json({profiles})}
