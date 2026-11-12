@@ -64,3 +64,17 @@ Email verification, password reset, rate limiting, staff invitation and scoped p
 - Batch, attendance, grading and quiz flows need end-to-end testing with real accounts and MongoDB.
 - Staff permissions are checked on the new staff routes; map roles to actual course/batch assignments before allowing staff to manage only their own classes.
 - Build, lint, automated tests, rate limits, file scanning, and security review must be completed before production.
+
+## Placement CRM milestone
+- Admin and authorised placement staff can publish job and internship opportunities.
+- Students can browse published openings, submit a resume URL and cover letter, and view their application statuses.
+- Candidate pipeline supports applied, screening, interview, offered, hired, rejected and withdrawn stages.
+- Staff can add internal notes and record interview scheduling timestamps through the application API.
+- Duplicate applications to the same opening are prevented by a database unique index.
+- Student application responses omit internal staff notes.
+- Admin dashboard and student dashboard now link to the placement workspace.
+
+## Placement release notes
+- Resume uploads are not implemented; applicants currently provide a URL. Add private object storage, file-type validation, malware scanning and access-controlled downloads before handling uploaded CVs.
+- Employer self-service accounts, automated email/WhatsApp notifications, calendar invitations, interview feedback forms, placement eligibility rules and placement outcome analytics are future work.
+- This milestone is code-complete at repository level but has not yet passed a full production build or live MongoDB integration test.
