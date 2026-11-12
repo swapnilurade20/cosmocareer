@@ -1,0 +1,7 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export type LeadStatus="new"|"contacted"|"counselling"|"interested"|"enrolled"|"not_interested"|"follow_up";
+export interface ICounsellorLead{name:string;email?:string;phone:string;source:string;interest?:string;status:LeadStatus;assignedTo:mongoose.Types.ObjectId;nextFollowUpAt?:Date;notes:{body:string;authorId:mongoose.Types.ObjectId;createdAt:Date}[];createdBy:mongoose.Types.ObjectId}
+const schema=new Schema<ICounsellorLead>({name:{type:String,required:true,trim:true,maxlength:100},email:{type:String,lowercase:true,trim:true,maxlength:254},phone:{type:String,required:true,trim:true,maxlength:20},source:{type:String,default:"website",trim:true,maxlength:80},interest:{type:String,trim:true,maxlength:160},status:{type:String,enum:["new","contacted","counselling","interested","enrolled","not_interested","follow_up"],default:"new"},assignedTo:{type:Schema.Types.ObjectId,ref:"User",required:true,index:true},nextFollowUpAt:Date,notes:[{body:{type:String,required:true,maxlength:3000},authorId:{type:Schema.Types.ObjectId,ref:"User",required:true},createdAt:{type:Date,default:Date.now}}],createdBy:{type:Schema.Types.ObjectId,ref:"User",required:true}},{timestamps:true});
+schema.index({assignedTo:1,status:1,nextFollowUpAt:1});
+schema.index({phone:1});
+const CounsellorLead:Model<ICounsellorLead>=mongoose.models.CounsellorLead||mongoose.model<ICounsellorLead>("CounsellorLead",schema);export default CounsellorLead;
