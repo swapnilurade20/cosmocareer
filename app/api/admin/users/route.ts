@@ -1,0 +1,2 @@
+import {NextRequest,NextResponse} from "next/server";import {requireAdmin} from "@/lib/admin";import User from "@/models/User";
+export async function GET(req:NextRequest){const auth=await requireAdmin(req);if("error" in auth)return auth.error;const users=await User.find().select("name email phone role isActive permissions preferredLanguage createdAt").sort({createdAt:-1}).limit(500).lean();return NextResponse.json({users})}
