@@ -1,0 +1,9 @@
+import {NextRequest,NextResponse} from "next/server";
+import mongoose from "mongoose";
+import {z} from "zod";
+import {requirePermission} from "@/lib/admin";
+import AssignmentSubmission from "@/models/AssignmentSubmission";
+import Assignment from "@/models/Assignment";
+const schema=z.object({submissionId:z.string(),decision:z.enum(["approved","resubmit"]),score:z.number().min(0).max(100),feedback:z.string().trim().min(2).max(5000)});
+export async function GET(req:NextRequest){const auth=await requirePermission(req,"enrollments.read");if("error" in auth)return auth.error;const submissions=await AssignmentSubmission.find().populate({path:"assignmentId",select:"title courseId",populate:{path:"courseId",select:"title"}}).populate("studentId","name email").sort({submittedAt:1}).limit(200).lean();return NextResponse.json({submissions});}
+export async function PATCH(req:NextRequest){const auth=await requirePermission(req,"enrollments.manage");if("error" in auth)return auth.error;const parsed=schema.safeParse(await req.json().catch(()=>null));if(!parsed.success||!mongoose.isValidObjectId(parsed.data?.submissionId))return NextResponse.json({error:"Invalid review details."},{status:400});const submission=await AssignmentSubmission.findById(parsed.data.submissionId);if(!submission)return NextResponse.json({error:"Submission not found."},{status:404});if(submission.status==="graded")return NextResponse.json({error:"This submission is already approved. Ask an administrator to reopen it if needed."},{status:409});submission.status=parsed.data.decision==="approved"?"graded":"resubmission";submission.score=parsed.data.score;submission.feedback=parsed.data.feedback;submission.gradedBy=new mongoose.Types.ObjectId(auth.session.userId);submission.gradedAt=new Date();await submission.save();return NextResponse.json({submission});}
