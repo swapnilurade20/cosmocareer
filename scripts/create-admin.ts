@@ -2,6 +2,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import {connectDB} from "../lib/db";
 import User from "../models/User";
+import mongoose from "mongoose";
 
 async function main(){
   const email=process.env.ADMIN_EMAIL?.trim().toLowerCase();
@@ -15,4 +16,4 @@ async function main(){
   await User.create({name,email,passwordHash,role:"admin",preferredLanguage:"en",isActive:true});
   console.log("Admin account created. Sign in using the configured email and password.");
 }
-main().catch(error=>{console.error(error);process.exitCode=1});
+main().catch(error=>{console.error(error);process.exitCode=1}).finally(async()=>{await mongoose.disconnect()});
