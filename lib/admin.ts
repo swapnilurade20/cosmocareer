@@ -1,0 +1,6 @@
+import {NextRequest,NextResponse} from "next/server";
+import {connectDB} from "@/lib/db";
+import {readSession,SESSION_COOKIE} from "@/lib/session";
+import User,{type StaffPermission} from "@/models/User";
+export async function requireAdmin(req:NextRequest){const token=req.cookies.get(SESSION_COOKIE)?.value;const session=token?await readSession(token):null;if(!session||session.role!=="admin")return {error:NextResponse.json({error:"Administrator access required."},{status:403})};await connectDB();const admin=await User.findById(session.userId);if(!admin||!admin.isActive||admin.role!=="admin")return {error:NextResponse.json({error:"Administrator access required."},{status:403})};return {session}}
+export async function requirePermission(req:NextRequest,permission:StaffPermission){const token=req.cookies.get(SESSION_COOKIE)?.value;const session=token?await readSession(token):null;if(!session)return {error:NextResponse.json({error:"Sign in required."},{status:401})};await connectDB();const user=await User.findById(session.userId);if(!user||!user.isActive)return {error:NextResponse.json({error:"Account unavailable."},{status:403})};if(user.role!=="admin"&&!user.permissions.includes(permission))return {error:NextResponse.json({error:"You do not have permission to do this."},{status:403})};return {session,user}}
