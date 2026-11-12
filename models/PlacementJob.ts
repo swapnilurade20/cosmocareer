@@ -1,0 +1,5 @@
+import mongoose,{Schema,type Model} from "mongoose";
+export interface IPlacementJob{title:string;company:string;location:string;employmentType:"full-time"|"internship"|"contract"|"remote";description:string;requirements:string[];skills:string[];salaryMin?:number;salaryMax?:number;applyBy?:Date;isPublished:boolean;createdBy:string}
+const schema=new Schema<IPlacementJob>({title:{type:String,required:true,trim:true,maxlength:160},company:{type:String,required:true,trim:true,maxlength:120},location:{type:String,required:true,trim:true,maxlength:120},employmentType:{type:String,enum:["full-time","internship","contract","remote"],default:"full-time"},description:{type:String,required:true,maxlength:12000},requirements:{type:[String],default:[]},skills:{type:[String],default:[]},salaryMin:{type:Number,min:0},salaryMax:{type:Number,min:0},applyBy:Date,isPublished:{type:Boolean,default:false},createdBy:{type:String,required:true}},{timestamps:true});
+schema.index({isPublished:1,applyBy:1,createdAt:-1});
+const PlacementJob:Model<IPlacementJob>=mongoose.models.PlacementJob||mongoose.model<IPlacementJob>("PlacementJob",schema);export default PlacementJob;
