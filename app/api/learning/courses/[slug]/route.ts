@@ -69,9 +69,16 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
   }catch(error){
     const detail=error instanceof Error?error.message:"Unknown server error";
     console.error("[GET /api/learning/courses/[slug]]",detail);
+    const publicMessage=detail.includes("MONGODB_URI")
+      ?"Course database is not configured on the hosting server."
+      :detail.toLowerCase().includes("auth_secret")
+      ?"Login configuration is incomplete on the hosting server."
+      :detail.toLowerCase().includes("timed out")||detail.toLowerCase().includes("server selection")
+      ?"The course database could not be reached. Check the MongoDB Atlas connection and IP access list."
+      :"Course lessons are temporarily unavailable. The course information is still available below.";
     return NextResponse.json(
-      {error:"We couldn't load this course right now. Please refresh the page. If the problem continues, contact support."},
-      {status:500,headers:{"Cache-Control":"no-store"}}
+      {error:publicMessage},
+      {status:503,headers:{"Cache-Control":"no-store"}}
     );
   }
 }
