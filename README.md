@@ -147,3 +147,20 @@ The learner dashboard links each active enrolment to `/learning/programme?course
 - Programme tracking endpoints: `GET /api/learning/programme?courseId=...`, `PATCH /api/learning/programme/milestones`, `GET/PATCH /api/admin/learning-milestones`, and `GET/PATCH /api/admin/assignment-submissions`.
 
 Operational notes: final assessment and interview outcomes must be entered by authorised staff; the platform does not automatically conduct mock interviews. Placement support duration defaults to three months for new milestone records and can be changed by staff. The live payment/EMI checkout remains a separate integration and is not enabled by these changes.
+
+
+## Contact form email setup
+
+The public Contact page submits to `POST /api/contact`. Configure these values in Hostinger's Node.js app environment settings (do not commit real credentials):
+
+- `SMTP_HOST`: SMTP server hostname supplied by your email provider
+- `SMTP_PORT`: usually `465` for implicit TLS or `587` for STARTTLS
+- `SMTP_SECURE`: `true` for port 465; `false` for port 587
+- `SMTP_USER`: authenticated mailbox username
+- `SMTP_PASS`: mailbox or provider-generated SMTP password
+- `SMTP_FROM_EMAIL`: sender address authorised by the SMTP provider (often the same mailbox as SMTP_USER)
+- `CONTACT_TO_EMAIL`: Growmorex inbox that receives enquiries
+
+Use the exact SMTP hostname and credentials shown by the provider for the `growmorex.in` mailbox. After adding or changing environment variables, redeploy/restart the Node.js app. Send a real test enquiry and verify delivery, spam-folder handling and the reply-to address.
+
+The API includes basic in-process IP rate limiting. This is a first-release safeguard, not a distributed rate limiter: limits can reset on restart and are not shared across multiple app instances. For a multi-instance deployment, replace it with a shared store such as Redis. Do not collect passwords or payment details in this form.
