@@ -1,2 +1,9 @@
-import {NextRequest,NextResponse} from "next/server";import {requireAdmin} from "@/lib/admin";import User from "@/models/User";
+import {NextRequest,NextResponse} from "next/server";
+import {z} from "zod";
+import bcrypt from "bcryptjs";
+import {requireAdmin} from "@/lib/admin";
+import User,{STAFF_PERMISSIONS} from "@/models/User";
+import AuditLog from "@/models/AuditLog";
+const schema=z.object({name:z.string().trim().min(2).max(100),email:z.string().trim().email().max(254),password:z.string().min(12).max(72),phone:z.string().trim().max(20).optional(),role:z.enum(["teacher","employee","counsellor"]),permissions:z.array(z.enum(STAFF_PERMISSIONS)).default([])});
 export async function GET(req:NextRequest){const auth=await requireAdmin(req);if("error" in auth)return auth.error;const users=await User.find().select("name email phone role isActive permissions preferredLanguage createdAt").sort({createdAt:-1}).limit(500).lean();return NextResponse.json({users})}
+export async function POST(req:NextRequest){const auth=await requireAdmin(req);if("error" in auth)return auth.error;const parsed=schema.safeParse(await req.json().catch(()=>null));if(!parsed.success)return NextResponse.json({error:"Check the details. Use a valid email and a password of at least 12 characters."},{status:400});const email=parsed.data.email.toLowerCase();if(await User.exists({email}))return NextResponse.json({error:"An account with this email already exists."},{status:409});const passwordHash=await bcrypt.hash(parsed.data.password,12);const user=await User.create({...parsed.data,email,passwordHash,isActive:true,preferredLanguage:"en"});await AuditLog.create({actorId:auth.session.userId,action:"user.created",targetType:"user",targetId:String(user._id),details:{email,role:user.role,permissions:user.permissions}});return NextResponse.json({user:{_id:String(user._id),name:user.name,email:user.email,role:user.role,isActive:user.isActive,permissions:user.permissions}},{status:201})}
