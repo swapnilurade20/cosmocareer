@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const fieldStyle = { width: "100%", padding: "14px 15px", border: "1px solid #d0d5dd", borderRadius: 12, background: "#fff", color: "#101828", fontSize: 15 };
 
