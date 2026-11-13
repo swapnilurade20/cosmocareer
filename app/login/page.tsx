@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [busy, setBusy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const search = useSearchParams();
+
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,7 +27,7 @@ export default function LoginPage() {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "We couldn't sign you in. Please check your details.");
-      const next = search.get("next");
+      const next = new URLSearchParams(window.location.search).get("next");
       if (next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/admin")) {
         router.replace(next);
       } else {
