@@ -17,6 +17,15 @@ const stages=[
  {n:"05",time:"Days 31–40",title:"Practise for interviews",desc:"Take mock interviews, receive feedback and prepare a practical action plan for your next step."}
 ];
 
+async function readApiResponse(response:Response){
+ const raw=await response.text();
+ if(!raw.trim())throw new Error(response.ok?"The course service returned an empty response. Please try again.":"The course service is temporarily unavailable. Please try again.");
+ let data:any;
+ try{data=JSON.parse(raw)}catch{throw new Error("The course service returned an invalid response. Please refresh and try again.")}
+ if(!response.ok)throw new Error(data?.error||"Unable to load this course.");
+ return data;
+}
+
 export default function CourseLearningPage(){
  const params=useParams<{slug:string}>();
  const router=useRouter();
@@ -33,27 +42,29 @@ export default function CourseLearningPage(){
  const lastSaved=useRef(0);
 
  async function load(){
+  setLoading(true);setError("");
   try{
-   const r=await fetch("/api/learning/courses/"+slug,{cache:"no-store"});
-   const d=await r.json();
-   if(!r.ok)throw new Error(d.error||"Course unavailable");
-   setCourse(d.course);setModules(d.modules||[]);setEnrolled(Boolean(d.enrolled));
-   const first=(d.modules||[]).flatMap((m:Module)=>m.lessons)[0];
+   const r=await fetch("/api/learning/courses/"+encodeURIComponent(slug),{cache:"no-store",headers:{Accept:"application/json"}});
+   const d=await readApiResponse(r);
+   setCourse(d.course);setModules(Array.isArray(d.modules)?d.modules:[]);setEnrolled(Boolean(d.enrolled));
+   const first=(Array.isArray(d.modules)?d.modules:[]).flatMap((m:Module)=>m.lessons||[])[0];
    setSelected((old:Lesson|null)=>old||first||null);
   }catch(e){setError(e instanceof Error?e.message:"Unable to load course")}
   finally{setLoading(false)}
  }
 
- useEffect(()=>{let active=true;setLoading(true);(async()=>{try{
-  const r=await fetch("/api/learning/courses/"+slug,{cache:"no-store"});
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.error||"Course unavailable");
-  if(!active)return;
-  setCourse(d.course);setModules(d.modules||[]);setEnrolled(Boolean(d.enrolled));
-  const first=(d.modules||[]).flatMap((m:Module)=>m.lessons)[0];
-  setSelected((old:Lesson|null)=>old||first||null);
- }catch(e){if(active)setError(e instanceof Error?e.message:"Unable to load course")}
- finally{if(active)setLoading(false)}})();return()=>{active=false}},[slug]);
+ useEffect(()=>{let active=true;setLoading(true);setError("");setSelected(null);
+  (async()=>{try{
+   const r=await fetch("/api/learning/courses/"+encodeURIComponent(slug),{cache:"no-store",headers:{Accept:"application/json"}});
+   const d=await readApiResponse(r);
+   if(!active)return;
+   setCourse(d.course);setModules(Array.isArray(d.modules)?d.modules:[]);setEnrolled(Boolean(d.enrolled));
+   const first=(Array.isArray(d.modules)?d.modules:[]).flatMap((m:Module)=>m.lessons||[])[0];
+   setSelected(first||null);
+  }catch(e){if(active)setError(e instanceof Error?e.message:"Unable to load course")}
+  finally{if(active)setLoading(false)}})();
+  return()=>{active=false};
+ },[slug]);
 
  async function enroll(){
   if(!course)return;
