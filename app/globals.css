@@ -510,3 +510,73 @@ img{max-width:100%}
 .course-detail-page .course-stage-grid p,.course-detail-page .course-outcome-grid p{font-size:13px}
 .course-error-panel{align-items:flex-start;flex-direction:column;font-size:13px}
 }
+
+
+/* Course detail typography: readable body copy, labels and lesson controls */
+.course-detail-page .course-detail-copy>p,
+.course-detail-page .course-section-heading>p,
+.course-detail-page .course-section-intro,
+.course-detail-page .course-outcomes-section p,
+.course-detail-page .course-skills-section p,
+.course-detail-page .course-project-panel>p,
+.course-detail-page .course-roles-section p,
+.course-detail-page .course-faq-grid>div:first-child>p,
+.course-detail-page .course-faq-list details p,
+.course-detail-page .course-placement-band p {
+  font-size:17px !important;
+  line-height:1.85 !important;
+}
+.course-detail-page .course-detail-copy .course-hero-promise{font-size:23px !important;line-height:1.65 !important}
+.course-detail-page .course-detail-copy .course-hero-who{font-size:18px !important;line-height:1.85 !important}
+.course-detail-page .course-outcome-grid h3,
+.course-detail-page .course-stage-grid h3{font-size:19px !important;line-height:1.4}
+.course-detail-page .course-outcome-grid p,
+.course-detail-page .course-stage-grid p,
+.course-detail-page .course-project-list>div,
+.course-detail-page .course-tool-note p,
+.course-detail-page .course-role-pills span{font-size:15px !important;line-height:1.8 !important}
+.course-detail-page .course-skill-list b{font-size:17px !important;line-height:1.6}
+.course-detail-page .course-skill-list>div>span{font-size:13px !important}
+.course-detail-page .course-price{font-size:36px}
+.course-detail-page .course-price small,
+.course-detail-page .course-price-inner>div:first-child>p{font-size:15px !important}
+.course-detail-page .course-price-facts b{font-size:18px !important}
+.course-detail-page .course-price-facts small{font-size:13px !important}
+.course-detail-page .course-module>b{font-size:16px !important;line-height:1.5}
+.course-detail-page .course-module button{font-size:15px !important;line-height:1.5;padding:13px 12px !important}
+.course-detail-page .course-module button small{font-size:12px !important}
+.course-detail-page .course-content-heading h3{font-size:20px !important}
+.course-detail-page .course-content-heading>span,
+.course-detail-page .course-player-label small{font-size:13px !important}
+.course-detail-page .course-player-label span,
+.course-detail-page .course-kicker{font-size:12px !important;letter-spacing:1.5px}
+.course-detail-page .lesson-player-panel h3{font-size:23px !important;line-height:1.45}
+.course-detail-page .course-video-placeholder b{font-size:19px !important}
+.course-detail-page .course-video-placeholder p,
+.course-detail-page .course-video-placeholder span{font-size:15px !important;line-height:1.8}
+.course-detail-page .course-faq-list summary{font-size:16px !important;line-height:1.6}
+.course-detail-page .course-faq-list details p{font-size:15px !important;line-height:1.85}
+.course-detail-page .course-placement-band small{font-size:13px !important;line-height:1.8}
+.course-detail-page .course-demo-link,
+.course-detail-page .course-trust-points{font-size:14px !important}
+.course-detail-page .course-error-panel{font-size:16px !important;line-height:1.8}
+@media(max-width:700px){
+ .course-detail-page .course-detail-copy .course-hero-promise{font-size:19px !important}
+ .course-detail-page .course-detail-copy .course-hero-who{font-size:16px !important}
+ .course-detail-page .course-detail-copy>p,
+ .course-detail-page .course-section-heading>p,
+ .course-detail-page .course-section-intro,
+ .course-detail-page .course-outcomes-section p,
+ .course-detail-page .course-skills-section p,
+ .course-detail-page .course-project-panel>p,
+ .course-detail-page .course-roles-section p,
+ .course-detail-page .course-faq-grid>div:first-child>p,
+ .course-detail-page .course-faq-list details p,
+ .course-detail-page .course-placement-band p{font-size:15px !important}
+ .course-detail-page .course-outcome-grid p,
+ .course-detail-page .course-stage-grid p,
+ .course-detail-page .course-project-list>div,
+ .course-detail-page .course-tool-note p{font-size:14px !important}
+ .course-detail-page .course-skill-list b{font-size:15px !important}
+ .course-detail-page .course-module button{font-size:14px !important}
+}
