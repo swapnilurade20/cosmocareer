@@ -467,3 +467,46 @@ img{max-width:100%}
 @media(max-width:700px){.course-detail-hero{padding:38px 0 35px}.course-detail-hero-grid,.course-skills-grid,.course-roles-grid,.course-faq-grid{grid-template-columns:1fr;gap:27px}.course-detail-copy h1{font-size:42px;letter-spacing:-1.8px}.course-hero-visual{min-height:250px}.course-hero-visual>img{max-height:245px}.course-visual-orbit{width:220px;height:220px}.course-visual-note{right:0;bottom:4px}.course-trust-points{gap:10px}.course-price-inner{align-items:flex-start;flex-direction:column}.course-price-facts{order:0;gap:18px}.course-price-facts span{padding-left:12px}.course-price-inner>.btn{width:100%}.course-outcome-grid{grid-template-columns:1fr 1fr;gap:9px}.course-outcome-grid article{padding:15px}.course-stage-grid{grid-template-columns:1fr 1fr}.course-roles-art{min-height:230px}.course-learning-grid,.course-loading-panel{grid-template-columns:1fr}.course-content-panel{position:static;max-height:none}.course-video-placeholder{min-height:180px;padding:16px;gap:12px}.course-video-placeholder img{width:30%}.course-placement-band>.container{align-items:flex-start;flex-direction:column;padding:26px 22px}.course-placement-btn{width:100%}}
 @media(max-width:420px){.course-outcome-grid,.course-stage-grid{grid-template-columns:1fr}.course-hero-actions{align-items:flex-start;flex-direction:column;gap:13px}.course-detail-copy h1{font-size:37px}.course-price-facts{gap:11px}.course-price-facts span{padding-left:9px}.course-price-facts b{font-size:10px}.course-price-facts small{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.course-loading-panel span{animation:none}}
+
+
+/* Improve course detail reading comfort and lesson error visibility */
+.course-detail-page .course-hero-promise{font-size:21px;line-height:1.65}
+.course-detail-page .course-hero-who{font-size:16px;line-height:1.9}
+.course-detail-page .course-demo-link{font-size:14px}
+.course-detail-page .course-trust-points{font-size:12px;line-height:1.7}
+.course-detail-page .course-price-inner>div:first-child>p{font-size:12px}
+.course-detail-page .course-price-facts b{font-size:15px}
+.course-detail-page .course-price-facts small{font-size:11px}
+.course-detail-page .course-section-heading>p,.course-detail-page .course-section-intro{font-size:16px;line-height:1.9}
+.course-detail-page .course-outcome-grid h3{font-size:17px}
+.course-detail-page .course-outcome-grid p{font-size:14px;line-height:1.85}
+.course-detail-page .course-skill-list b{font-size:14px}
+.course-detail-page .course-project-panel>p{font-size:14px;line-height:1.85}
+.course-detail-page .course-project-list>div{font-size:13px;line-height:1.75}
+.course-detail-page .course-tool-note b{font-size:13px}
+.course-detail-page .course-tool-note p{font-size:13px;line-height:1.8}
+.course-detail-page .course-stage-grid small{font-size:11px}
+.course-detail-page .course-stage-grid h3{font-size:17px}
+.course-detail-page .course-stage-grid p{font-size:13px;line-height:1.85}
+.course-detail-page .course-roles-grid>div:first-child>p{font-size:14px;line-height:1.9}
+.course-detail-page .course-role-pills span{font-size:12px}
+.course-detail-page .course-module>b{font-size:14px}
+.course-detail-page .course-module button{font-size:13px;padding:11px}
+.course-detail-page .course-video-placeholder b{font-size:16px}
+.course-detail-page .course-video-placeholder p{font-size:13px;line-height:1.8}
+.course-detail-page .course-video-placeholder span{font-size:12px}
+.course-detail-page .course-faq-grid>div:first-child>p{font-size:14px;line-height:1.9}
+.course-detail-page .course-faq-list summary{font-size:14px}
+.course-detail-page .course-faq-list details p{font-size:13px;line-height:1.9}
+.course-detail-page .course-placement-band p{font-size:14px;line-height:1.9}
+.course-detail-page .course-placement-band small{font-size:11px;line-height:1.7}
+.course-detail-page .course-kicker{font-size:10px}
+.course-error-panel{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;border-color:#f0c7bc;background:#fff8f5;color:#8d3c27;font-size:14px;line-height:1.7}
+.course-error-panel .btn{flex:none;margin:0}
+@media(max-width:700px){
+.course-detail-page .course-hero-promise{font-size:18px}
+.course-detail-page .course-hero-who{font-size:14px}
+.course-detail-page .course-section-heading>p,.course-detail-page .course-section-intro{font-size:14px}
+.course-detail-page .course-stage-grid p,.course-detail-page .course-outcome-grid p{font-size:13px}
+.course-error-panel{align-items:flex-start;flex-direction:column;font-size:13px}
+}
