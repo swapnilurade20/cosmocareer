@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/admin")) {
         router.replace(next);
       } else {
-        router.replace(data.user?.role === "admin" ? "/admin" : data.user?.role === "employer" ? "/employer" : data.user?.role === "counsellor" ? "/counsellor" : data.user?.role === "teacher" || data.user?.role === "employee" ? "/employee" : "/dashboard");
+        router.replace(data.user?.role === "admin" ? "/admin" : data.user?.role === "employer" ? "/employer" : data.user?.role === "counsellor" ? "/counsellor" : data.user?.role === "teacher" ? "/teacher" : data.user?.role === "employee" ? "/employee" : "/dashboard");
       }
       router.refresh();
     } catch (err) {
