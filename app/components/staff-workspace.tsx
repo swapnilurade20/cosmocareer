@@ -6,7 +6,6 @@ import {useRouter} from "next/navigation";
 type Account={name:string;email:string;role:string;preferredLanguage:string};
 const tiles=[
  {title:"My assignments",description:"Open assigned work and review learner submissions when your account has the required permissions.",href:"/staff/assignments",label:"Open assignments"},
- {title:"Batch attendance",description:"Open a batch attendance session using the batch link shared by your administrator.",href:"/staff/batches",label:"Batch workspace"},
  {title:"Learner dashboard",description:"Return to your account overview and account details.",href:"/dashboard",label:"My account"}
 ];
 
