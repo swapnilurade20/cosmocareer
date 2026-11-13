@@ -50,7 +50,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
       title:m.title,
       description:m.description,
       order:m.order,
-      lessons:m.lessons
+      lessons:(m.lessons||[])
         .filter(l=>enrolled||l.isPreview)
         .map(l=>({
           _id:l._id,
@@ -67,7 +67,8 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
       {headers:{"Cache-Control":"private, no-store, max-age=0"}}
     );
   }catch(error){
-    console.error("[GET /api/learning/courses/[slug]]",error);
+    const detail=error instanceof Error?error.message:"Unknown server error";
+    console.error("[GET /api/learning/courses/[slug]]",detail);
     return NextResponse.json(
       {error:"We couldn't load this course right now. Please refresh the page. If the problem continues, contact support."},
       {status:500,headers:{"Cache-Control":"no-store"}}
