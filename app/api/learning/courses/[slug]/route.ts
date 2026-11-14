@@ -47,7 +47,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
       modules=await CourseModule.find({courseId:course._id})
         .select("title description order lessons")
         .sort({order:1})
-        .lean();
+        .lean() as unknown as ICourseModule[];
     }catch(moduleError){
       lessonWarning="Course lessons are being prepared. You can still view course details and enrol.";
       console.error("[GET /api/learning/courses/[slug]] lesson query failed",moduleError);
