@@ -41,10 +41,17 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
         }
       }
     }
-    const modules=await CourseModule.find({courseId:course._id})
-      .select("title description order lessons")
-      .sort({order:1})
-      .lean();
+    let modules:any[]=[];
+    let lessonWarning="";
+    try{
+      modules=await CourseModule.find({courseId:course._id})
+        .select("title description order lessons")
+        .sort({order:1})
+        .lean();
+    }catch(moduleError){
+      lessonWarning="Course lessons are being prepared. You can still view course details and enrol.";
+      console.error("[GET /api/learning/courses/[slug]] lesson query failed",moduleError);
+    }
     const safeModules=modules.map(m=>({
       _id:m._id,
       title:m.title,
@@ -63,7 +70,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
         }))
     }));
     return NextResponse.json(
-      {course,modules:safeModules,enrolled},
+      {course,modules:safeModules,enrolled,lessonWarning},
       {headers:{"Cache-Control":"private, no-store, max-age=0"}}
     );
   }catch(error){
