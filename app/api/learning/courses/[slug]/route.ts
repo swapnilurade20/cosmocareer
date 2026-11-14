@@ -23,7 +23,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
     if(session){
       const activeUser=await User.findOne({_id:session.userId,isActive:true,role:"student"})
         .select("_id")
-        .lean() as unknown as ICourseModule[];
+        .lean();
       if(activeUser){
         const enrollment=await Enrollment.findOne({
           studentId:activeUser._id,
