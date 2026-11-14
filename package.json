@@ -18,7 +18,8 @@
     "jose": "^6.0.11",
     "zod": "^4.0.0",
     "bcryptjs": "^3.0.2",
-    "nodemailer": "^10.1.4"
+    "nodemailer": "^10.1.4",
+    "@supabase/supabase-js": "^2.57.4"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
