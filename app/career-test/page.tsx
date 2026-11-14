@@ -1,107 +1,136 @@
 "use client";
 
-import {useMemo,useState} from "react";
+import { useMemo, useState } from "react";
 
-type Area="Technology"|"Business"|"Creative"|"People"|"Analytical"|"Communication"|"Practical"|"Research"|"Care"|"Entrepreneurship";
-type Question={text:string;options:{label:string;area:Area}[]};
-const questions:Question[]=[
- {text:"Which activity would you most enjoy doing in a typical workday?",options:[{label:"Building apps, websites or using new technology",area:"Technology"},{label:"Planning a business, product or marketing campaign",area:"Business"},{label:"Creating videos, designs, stories or other content",area:"Creative"},{label:"Teaching, guiding or helping people",area:"People"}]},
- {text:"When you face a difficult problem, what do you naturally do first?",options:[{label:"Study the data and find the logical answer",area:"Analytical"},{label:"Research the topic and verify facts",area:"Research"},{label:"Try a practical solution and learn by doing",area:"Practical"},{label:"Discuss it and understand everyone's point of view",area:"Communication"}]},
- {text:"Which result would make you feel most proud?",options:[{label:"A useful digital tool or technical solution",area:"Technology"},{label:"A successful project, business or sales result",area:"Entrepreneurship"},{label:"A creative work that people love",area:"Creative"},{label:"Making a meaningful difference in someone's life",area:"Care"}]},
- {text:"Which kind of task sounds most interesting?",options:[{label:"Analysing numbers, trends and performance",area:"Analytical"},{label:"Writing, presenting or explaining ideas",area:"Communication"},{label:"Organising people, plans and deadlines",area:"Business"},{label:"Investigating a question in depth",area:"Research"}]},
- {text:"What type of environment would you prefer?",options:[{label:"A technology-focused team that keeps learning",area:"Technology"},{label:"A creative studio or media environment",area:"Creative"},{label:"A people-focused team, school or support service",area:"People"},{label:"Hands-on operations, equipment or field work",area:"Practical"}]},
- {text:"Which responsibility would you choose for a group project?",options:[{label:"Lead the plan and make decisions",area:"Entrepreneurship"},{label:"Present the idea and communicate with others",area:"Communication"},{label:"Research information and check accuracy",area:"Research"},{label:"Support the team and resolve people's concerns",area:"Care"}]},
- {text:"Which subject would you be most excited to learn?",options:[{label:"Programming, AI or cybersecurity",area:"Technology"},{label:"Finance, management or marketing",area:"Business"},{label:"Psychology, health or wellbeing",area:"Care"},{label:"Design, filmmaking or digital storytelling",area:"Creative"}]},
- {text:"How do you prefer to make important decisions?",options:[{label:"Compare evidence, numbers and possible outcomes",area:"Analytical"},{label:"Talk to people and understand their needs",area:"People"},{label:"Explore new possibilities and take a considered risk",area:"Entrepreneurship"},{label:"Test a practical option and observe the result",area:"Practical"}]},
- {text:"Which challenge would motivate you the most?",options:[{label:"Fixing a technical issue or building a digital product",area:"Technology"},{label:"Growing a brand or improving a company's results",area:"Business"},{label:"Creating something original from a blank page",area:"Creative"},{label:"Discovering new information and explaining what it means",area:"Research"}]},
- {text:"What do people most often rely on you for?",options:[{label:"Explaining things clearly and confidently",area:"Communication"},{label:"Listening, encouraging and helping them",area:"Care"},{label:"Finding patterns and solving complex problems",area:"Analytical"},{label:"Getting practical work organised and completed",area:"Practical"}]},
- {text:"Which work outcome matters most to you?",options:[{label:"Building something of my own",area:"Entrepreneurship"},{label:"Helping a team or organisation succeed",area:"Business"},{label:"Helping people learn and develop",area:"People"},{label:"Producing original creative work",area:"Creative"}]},
- {text:"Which daily activity would you enjoy most?",options:[{label:"Working with software, systems or digital tools",area:"Technology"},{label:"Writing reports, studying evidence or exploring ideas",area:"Research"},{label:"Meeting clients, presenting or negotiating",area:"Communication"},{label:"Supporting someone's wellbeing or progress",area:"Care"}]},
- {text:"When learning something new, which approach suits you?",options:[{label:"Experiment with tools and build a small project",area:"Practical"},{label:"Read deeply, investigate and take notes",area:"Research"},{label:"Discuss it with others and explain it back",area:"People"},{label:"Understand the business value and how to apply it",area:"Business"}]},
- {text:"Which future opportunity sounds most appealing?",options:[{label:"Data, finance or business intelligence",area:"Analytical"},{label:"Digital media, design or content creation",area:"Creative"},{label:"Starting a venture or launching a product",area:"Entrepreneurship"},{label:"Training, education or people development",area:"People"}]},
- {text:"If you could choose one project, what would it be?",options:[{label:"Develop a website, app or AI-powered solution",area:"Technology"},{label:"Research a real-world issue and recommend solutions",area:"Research"},{label:"Plan and run a small business campaign",area:"Business"},{label:"Create a service that improves people's lives",area:"Care"}]},
- {text:"Which task would you happily spend hours improving?",options:[{label:"Writing code or testing digital tools",area:"Technology"},{label:"Improving a business process or campaign",area:"Business"},{label:"Editing visuals, music or stories",area:"Creative"},{label:"Coaching or supporting another person",area:"Care"}]},
- {text:"Which kind of information do you enjoy working with?",options:[{label:"Numbers, charts and measurable results",area:"Analytical"},{label:"People's opinions and customer feedback",area:"Research"},{label:"Stories, images and creative references",area:"Creative"},{label:"Scientific, social or historical evidence",area:"Research"}]},
- {text:"Which role would you prefer in a new project team?",options:[{label:"Technical problem-solver",area:"Technology"},{label:"Project organiser",area:"Business"},{label:"Visual storyteller",area:"Creative"},{label:"Team supporter",area:"People"}]},
- {text:"What would you most like to create?",options:[{label:"An app or automated tool",area:"Technology"},{label:"A business plan or new service",area:"Entrepreneurship"},{label:"A film, design or media campaign",area:"Creative"},{label:"A learning or wellbeing programme",area:"Care"}]},
- {text:"Which challenge sounds most satisfying?",options:[{label:"Finding why a system is not working",area:"Technology"},{label:"Finding ways to increase sales",area:"Business"},{label:"Making a message visually memorable",area:"Creative"},{label:"Helping someone overcome a difficulty",area:"Care"}]},
- {text:"How do you feel about working with numbers?",options:[{label:"I enjoy analysing data and patterns",area:"Analytical"},{label:"I like using numbers for budgets and decisions",area:"Analytical"},{label:"I prefer visual and creative work",area:"Creative"},{label:"I prefer people-focused activities",area:"People"}]},
- {text:"Which communication activity appeals to you?",options:[{label:"Explaining technical ideas",area:"Technology"},{label:"Pitching a product or negotiating",area:"Entrepreneurship"},{label:"Writing scripts or telling stories",area:"Creative"},{label:"Teaching or mentoring",area:"People"}]},
- {text:"Which workplace responsibility would you choose?",options:[{label:"Maintaining digital systems",area:"Technology"},{label:"Managing budgets and schedules",area:"Business"},{label:"Designing content and presentations",area:"Creative"},{label:"Supporting recruitment or training",area:"People"}]},
- {text:"What would you like to learn deeply?",options:[{label:"AI, software and emerging technology",area:"Technology"},{label:"Markets, finance and business strategy",area:"Business"},{label:"Design, film and visual communication",area:"Creative"},{label:"Psychology, education and human behaviour",area:"Care"}]},
- {text:"Which type of problem do you prefer?",options:[{label:"A logic puzzle with a clear solution",area:"Analytical"},{label:"A business challenge with many trade-offs",area:"Business"},{label:"An open-ended creative brief",area:"Creative"},{label:"A personal or community challenge",area:"Care"}]},
- {text:"Which activity feels most natural to you?",options:[{label:"Checking details and spotting errors",area:"Analytical"},{label:"Planning tasks and coordinating people",area:"Practical"},{label:"Making images, videos or written content",area:"Creative"},{label:"Listening and understanding people's needs",area:"Care"}]},
- {text:"What would you prefer to present to a group?",options:[{label:"A technical demonstration",area:"Technology"},{label:"A business proposal with targets",area:"Entrepreneurship"},{label:"A creative concept or short film",area:"Creative"},{label:"A lesson or helpful explanation",area:"Communication"}]},
- {text:"Which project would you choose for a weekend?",options:[{label:"Build a simple website or automation",area:"Technology"},{label:"Research a product idea and its customers",area:"Entrepreneurship"},{label:"Create a short video or design portfolio",area:"Creative"},{label:"Volunteer to teach or help others",area:"People"}]},
- {text:"What motivates you most at work?",options:[{label:"Solving complex problems",area:"Analytical"},{label:"Achieving measurable goals",area:"Business"},{label:"Expressing original ideas",area:"Creative"},{label:"Making a positive difference",area:"Care"}]},
- {text:"Which kind of task would you rather avoid least?",options:[{label:"Troubleshooting software",area:"Technology"},{label:"Reviewing reports and budgets",area:"Analytical"},{label:"Revising creative work until it looks right",area:"Creative"},{label:"Handling questions and helping people",area:"People"}]},
- {text:"How would you approach an unfamiliar topic?",options:[{label:"Try the tools and learn by building",area:"Practical"},{label:"Study how organisations use it",area:"Business"},{label:"Explore examples and make something new",area:"Creative"},{label:"Talk to an expert and ask questions",area:"Communication"}]},
- {text:"Which outcome would you find most rewarding?",options:[{label:"A system that works faster and better",area:"Technology"},{label:"A project delivered on time and budget",area:"Business"},{label:"An audience connecting with your content",area:"Creative"},{label:"A person gaining confidence or skills",area:"People"}]},
- {text:"Which work setting sounds appealing?",options:[{label:"A software or engineering team",area:"Technology"},{label:"A company strategy or operations team",area:"Business"},{label:"A media, design or production studio",area:"Creative"},{label:"A school, community or support organisation",area:"Care"}]},
- {text:"Which subject would you choose for a research project?",options:[{label:"AI and digital innovation",area:"Technology"},{label:"Consumer behaviour and markets",area:"Research"},{label:"Film, design or cultural trends",area:"Creative"},{label:"Health, learning or society",area:"Care"}]},
- {text:"What would you do if a project was falling behind?",options:[{label:"Identify the technical blocker",area:"Technology"},{label:"Re-plan the tasks and resources",area:"Practical"},{label:"Find a creative alternative",area:"Creative"},{label:"Talk with the team and resolve concerns",area:"Communication"}]},
- {text:"Which responsibility sounds most interesting?",options:[{label:"Testing product quality and analysing issues",area:"Analytical"},{label:"Managing customer relationships and sales",area:"Communication"},{label:"Producing a campaign or media content",area:"Creative"},{label:"Training new team members",area:"People"}]},
- {text:"Which result would you like your work to have?",options:[{label:"Make technology easier to use",area:"Technology"},{label:"Help a company grow sustainably",area:"Entrepreneurship"},{label:"Inform or entertain an audience",area:"Creative"},{label:"Improve people's access to support",area:"Care"}]},
- {text:"Which task suits your patience best?",options:[{label:"Debugging and refining a technical solution",area:"Technology"},{label:"Comparing options before a business decision",area:"Analytical"},{label:"Practising a creative skill until polished",area:"Creative"},{label:"Guiding someone through a learning process",area:"People"}]},
- {text:"Which new skill would you practise voluntarily?",options:[{label:"Coding or data tools",area:"Technology"},{label:"Sales, finance or project planning",area:"Business"},{label:"Photography, editing or design",area:"Creative"},{label:"Public speaking, coaching or counselling basics",area:"Communication"}]},
- {text:"If you started a small venture, what would you focus on?",options:[{label:"Build a technology product",area:"Technology"},{label:"Find customers and manage operations",area:"Entrepreneurship"},{label:"Create the brand and content",area:"Creative"},{label:"Offer a service that helps people",area:"Care"}]}
-];
-const careers:Record<Area,{roles:string[];description:string;courses:string[]}> = {
- Technology:{roles:["Software Developer","Web Developer","AI / Machine Learning Associate","Cybersecurity Analyst","Cloud Support Engineer"],description:"You may enjoy building, maintaining and improving digital systems. Try beginner coding projects before choosing a specialisation.",courses:["Web development","Programming fundamentals","AI tools and automation"]},
- Business:{roles:["Business Analyst","Digital Marketing Executive","Product Coordinator","Operations Executive","Sales and Growth Associate"],description:"You may enjoy helping organisations understand customers, improve processes and reach goals.",courses:["Business analysis","Digital marketing","Sales and project management"]},
- Creative:{roles:["Video Editor","Graphic Designer","Content Creator","UI/UX Designer","Motion Graphics Artist"],description:"You may thrive when turning ideas into engaging visual, audio or written experiences. Build a portfolio with real projects.",courses:["Video editing","Content creation","Graphic and UI/UX design"]},
- People:{roles:["Teacher or Trainer","HR Executive","Customer Success Associate","Learning and Development Coordinator","Career Guidance Assistant"],description:"You may find meaning in guiding, teaching and supporting people. Explore roles that combine empathy with strong professional skills.",courses:["Communication skills","Training and facilitation","Human resources"]},
- Analytical:{roles:["Data Analyst","Financial Analyst","Business Intelligence Associate","Quality Analyst","Risk Analyst"],description:"You may enjoy working with evidence, patterns and structured problem-solving. Practise spreadsheets, data visualisation and critical thinking.",courses:["Excel and data analytics","Business analysis","Financial literacy"]},
- Communication:{roles:["Public Relations Executive","Corporate Communications Associate","Content Strategist","Client Relationship Executive","Recruitment Consultant"],description:"You may enjoy explaining ideas, building relationships and communicating with different audiences.",courses:["Business communication","Content writing","Digital marketing"]},
- Practical:{roles:["IT Support Technician","Production Assistant","Field Operations Coordinator","Logistics Associate","Technical Service Associate"],description:"You may prefer applied work where you can solve concrete problems and see direct results. Try a hands-on course or internship.",courses:["Technical support","Operations basics","Video production"]},
- Research:{roles:["Research Assistant","Market Research Analyst","Policy Research Associate","UX Research Assistant","Scientific Communications Assistant"],description:"You may enjoy investigating questions, evaluating evidence and developing expertise in a subject area.",courses:["Research methods","Data analysis","Report writing"]},
- Care:{roles:["Psychology Assistant (where qualified)","Wellbeing Programme Coordinator","Community Outreach Associate","Healthcare Administration Assistant","Special Education Support (with training)"],description:"You may be drawn to people-centred work. Some psychology, counselling and healthcare roles require recognised qualifications or licences.",courses:["Psychology fundamentals","Communication skills","Healthcare administration"]},
- Entrepreneurship:{roles:["Startup Founder","Small Business Owner","Business Development Associate","E-commerce Operator","Product Entrepreneur"],description:"You may enjoy creating and testing new ideas. Start with a small project, validate customer demand and learn basic finance.",courses:["Entrepreneurship","Digital marketing","Finance and business planning"]}
+type TypeCode = "R" | "I" | "A" | "S" | "E" | "C";
+type Item = { text: string; type: TypeCode };
+type Profile = { name: string; title: string; description: string; careers: string[]; pathways: string[]; course: string };
+
+const profiles: Record<TypeCode, Profile> = {
+ R: { name: "Realistic", title: "The Practical Builder", description: "You may enjoy practical, hands-on work involving tools, equipment, technology, making, repairing or working outdoors.", careers: ["Electrical / Electronics Technician", "Mechanical or Civil Technician", "Field Service Associate", "Video Production Technician", "Network Support Technician"], pathways: ["Diploma or ITI routes in relevant technical trades", "Engineering or applied technology degrees", "Hands-on projects, apprenticeships and safety training"], course: "Video Editing" },
+ I: { name: "Investigative", title: "The Curious Problem-Solver", description: "You may enjoy understanding how things work, analysing evidence, researching questions and solving complex problems.", careers: ["Data Analyst", "Business Analyst", "Research Assistant", "Quality Analyst", "Cybersecurity Analyst"], pathways: ["Mathematics, science or commerce foundations as relevant", "Data, programming or research-method courses", "Build a portfolio of analysis projects"], course: "AI Video Creation" },
+ A: { name: "Artistic", title: "The Creative Maker", description: "You may enjoy expressing ideas through design, media, storytelling, performance and original creative work.", careers: ["Video Editor", "Content Creator", "Graphic / Motion Designer", "UX/UI Designer", "Copywriter or Scriptwriter"], pathways: ["Design, media, communication or fine-arts education", "A portfolio of original work", "Practice with professional creative tools"], course: "Video Editing" },
+ S: { name: "Social", title: "The People Developer", description: "You may enjoy teaching, coaching, supporting, listening to and helping people learn or improve.", careers: ["Teacher / Trainer (with required qualifications)", "Learning and Development Associate", "Customer Success Associate", "Community Programme Coordinator", "HR / People Operations Associate"], pathways: ["Education, psychology, social work or HR routes", "Recognised qualifications for regulated roles", "Practice communication, facilitation and mentoring"], course: "Content Creation" },
+ E: { name: "Enterprising", title: "The Initiator", description: "You may enjoy persuading, leading, negotiating, organising initiatives and turning ideas into business results.", careers: ["Business Development Associate", "Sales Executive", "Marketing Executive", "Startup Founder", "Product or Project Coordinator"], pathways: ["Business, commerce, management or marketing education", "Sales, communication and project experience", "Test a small business idea and measure demand"], course: "Content Creation" },
+ C: { name: "Conventional", title: "The Organised Planner", description: "You may enjoy structured work with information, records, processes, numbers, accuracy and clear procedures.", careers: ["Accounts / Finance Assistant", "Operations Coordinator", "MIS Executive", "Banking Operations Associate", "Compliance / Documentation Assistant"], pathways: ["Commerce, accounting, administration or data routes", "Excel, accounting and documentation skills", "Practice accuracy with real-world case exercises"], course: "AI Video Creation" }
 };
-const scale=["Not at all like me","A little like me","Somewhat like me","Mostly like me","Very much like me"];
-export default function CareerTestPage(){
- const [answers,setAnswers]=useState<string[]>(Array(questions.length).fill(""));
- const [pageIndex,setPageIndex]=useState(0);
- const pageSize=5;
- const pageCount=Math.ceil(questions.length/pageSize);
- const pageStart=pageIndex*pageSize;
- const pageQuestions=questions.slice(pageStart,pageStart+pageSize);
- const pageComplete=pageQuestions.every((_,i)=>Boolean(answers[pageStart+i]));
- const [finished,setFinished]=useState(false);
+
+const items: Item[] = [
+ {type:"R",text:"Assembling, repairing or maintaining equipment and devices."},
+ {type:"R",text:"Creating or setting up physical things with my hands."},
+ {type:"R",text:"Working with cameras, lighting, sound or production equipment."},
+ {type:"R",text:"Learning how machines, networks or technical systems operate."},
+ {type:"R",text:"Doing practical tasks where I can see a tangible result."},
+ {type:"R",text:"Working outdoors, on-site or in an active environment."},
+ {type:"I",text:"Investigating why something happened and finding the evidence."},
+ {type:"I",text:"Working with data, numbers, patterns or research findings."},
+ {type:"I",text:"Solving difficult problems that need careful reasoning."},
+ {type:"I",text:"Learning scientific, technical or analytical concepts in depth."},
+ {type:"I",text:"Testing an idea to find out whether it actually works."},
+ {type:"I",text:"Comparing information from different sources before deciding."},
+ {type:"A",text:"Creating videos, photographs, graphics or visual stories."},
+ {type:"A",text:"Writing stories, scripts, articles or original ideas."},
+ {type:"A",text:"Designing something that is both useful and attractive."},
+ {type:"A",text:"Experimenting with music, performance or other creative forms."},
+ {type:"A",text:"Finding new ways to communicate an idea or message."},
+ {type:"A",text:"Working on projects where originality and imagination matter."},
+ {type:"S",text:"Teaching someone a skill or explaining a difficult idea."},
+ {type:"S",text:"Listening carefully and helping someone work through a problem."},
+ {type:"S",text:"Supporting a team so that everyone can do their best."},
+ {type:"S",text:"Planning learning, wellbeing or community activities."},
+ {type:"S",text:"Building positive relationships with people from different backgrounds."},
+ {type:"S",text:"Helping people gain confidence, knowledge or independence."},
+ {type:"E",text:"Persuading others to consider an idea, product or service."},
+ {type:"E",text:"Taking the lead and making decisions for a project."},
+ {type:"E",text:"Negotiating, networking or building professional relationships."},
+ {type:"E",text:"Starting a project or business and finding customers for it."},
+ {type:"E",text:"Setting ambitious goals and motivating others to achieve them."},
+ {type:"E",text:"Presenting proposals and taking responsibility for outcomes."},
+ {type:"C",text:"Organising records, files, schedules or important information."},
+ {type:"C",text:"Checking details carefully and correcting errors."},
+ {type:"C",text:"Working with budgets, accounts, spreadsheets or reports."},
+ {type:"C",text:"Following a clear process to complete work accurately."},
+ {type:"C",text:"Maintaining databases or keeping information up to date."},
+ {type:"C",text:"Planning tasks and tracking deadlines systematically."}
+];
+
+const scale = [
+ {value:1,label:"Strongly dislike"},
+ {value:2,label:"Dislike"},
+ {value:3,label:"Not sure"},
+ {value:4,label:"Like"},
+ {value:5,label:"Strongly like"}
+];
+const typeOrder: TypeCode[] = ["R","I","A","S","E","C"];
+
+export default function CareerTestPage() {
+ const [answers,setAnswers] = useState<number[]>(Array(items.length).fill(0));
+ const [page,setPage] = useState(0);
+ const [finished,setFinished] = useState(false);
+ const pageSize=6, pageCount=Math.ceil(items.length/pageSize), start=page*pageSize;
+ const current=items.slice(start,start+pageSize);
+ const complete=current.every((_,i)=>answers[start+i]>0);
  const answered=answers.filter(Boolean).length;
- const progress=Math.round(answered/questions.length*100);
- const results=useMemo(()=>Object.keys(careers).map(area=>{const key=area as Area;const total=answers.filter(answer=>answer===key).length;return {area:key,total,max:40,percent:Math.round(total/40*100)}}).sort((a,b)=>b.total-a.total),[answers]);
- const choose=(questionIndex:number,value:Area)=>setAnswers(old=>old.map((a,i)=>i===questionIndex?value:a));
- const restart=()=>{setAnswers(Array(questions.length).fill(""));setPageIndex(0);setFinished(false)};
+ const results=useMemo(()=>typeOrder.map(type=>{
+   const indexes=items.map((item,index)=>item.type===type?index:-1).filter(index=>index>=0);
+   const total=indexes.reduce((sum,index)=>sum+answers[index],0);
+   return {type,...profiles[type],total,max:indexes.length*5,score:Math.round(total/(indexes.length*5)*100)};
+ }).sort((a,b)=>b.score-a.score),[answers]);
+ const code=results.slice(0,3).map(result=>result.type).join("");
+ const choose=(index:number,value:number)=>setAnswers(old=>old.map((answer,i)=>i===index?value:answer));
+ const restart=()=>{setAnswers(Array(items.length).fill(0));setPage(0);setFinished(false);window.scrollTo({top:0,behavior:"smooth"});};
  return <main>
-  <section className="hero"><div className="container"><span className="tag">COSMOCAREER • CAREER DISCOVERY</span><h1>Discover career paths that match your interests.</h1><p>Answer 40 career questions about your interests, strengths and preferred work style. Choose the option that fits you best to explore suitable career directions.</p><p style={{fontSize:14,color:"#c7d2fe"}}>About 10–12 minutes · 40 questions · 5 questions per page · No right or wrong answers</p></div></section>
-  <section className="section"><div className="container" style={{maxWidth:850}}>
-   {!finished?<div className="card">
-    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">CAREER INTEREST ASSESSMENT</span><b>Page {pageIndex+1} of {pageCount}</b></div>
-    <div style={{height:9,background:"#e9eaf5",borderRadius:20,margin:"18px 0 20px",overflow:"hidden"}}><div style={{width:progress+"%",height:"100%",background:"#7774f5",borderRadius:20}}/></div>
-    <p className="muted" style={{fontSize:14,marginBottom:18}}>Answer all five questions on this page. Choose one option that best describes what you would enjoy.</p>
-    <div style={{display:"grid",gap:22}}>
-     {pageQuestions.map((question,offset)=>{const questionIndex=pageStart+offset;return <section key={questionIndex} style={{padding:"18px 20px",border:"1px solid #e7e8f0",borderRadius:16,background:"#fff"}}>
-      <div style={{fontSize:13,fontWeight:800,color:"#7774f5",letterSpacing:".04em",marginBottom:10}}>QUESTION {questionIndex+1} OF {questions.length}</div>
-      <h2 style={{fontSize:18,lineHeight:1.45,margin:"0 0 16px",fontWeight:750}}>{question.text}</h2>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9}}>
-       {question.options.map((option,i)=><button key={`${questionIndex}-${i}`} type="button" onClick={()=>choose(questionIndex,option.area)} aria-pressed={answers[questionIndex]===option.area} style={{textAlign:"left",padding:"13px 14px",borderRadius:11,border:answers[questionIndex]===option.area?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[questionIndex]===option.area?"#f0efff":"white",color:"#101828",fontSize:14,lineHeight:1.5,fontWeight:650,cursor:"pointer"}}><span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:24,height:24,borderRadius:20,background:answers[questionIndex]===option.area?"#7774f5":"#f1f2f6",color:answers[questionIndex]===option.area?"white":"#475467",marginRight:9,fontSize:12}}>{String.fromCharCode(65+i)}</span>{option.label}</button>)}
-      </div>
-     </section>})}
-    </div>
-    <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24,flexWrap:"wrap"}}>
-     <button className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={pageIndex===0} onClick={()=>setPageIndex(i=>i-1)}>Previous page</button>
-     <button type="button" className="btn primary" disabled={!pageComplete} onClick={()=>{if(!pageComplete)return;if(pageIndex===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPageIndex(current=>Math.min(current+1,pageCount-1));window.scrollTo({top:0,behavior:"smooth"})}}}>{pageIndex===pageCount-1?"See my results":"Next page"}</button>
-    </div>
-    <p className="muted" style={{fontSize:13,marginTop:16}}>{answered} of {questions.length} answered · Five questions per page</p>
-   </div>:<div>
-    <div className="card"><span className="tag">YOUR CAREER DISCOVERY RESULTS</span><h2 style={{fontSize:34,marginBottom:8}}>Your strongest interest areas</h2><p className="muted">These results are a starting point for exploration, not a diagnosis, aptitude certification or guarantee of job fit.</p>
-     <div style={{display:"grid",gap:17,marginTop:25}}>{results.slice(0,5).map((r,i)=><div key={r.area}><div style={{display:"flex",justifyContent:"space-between",gap:10,fontWeight:800,marginBottom:7}}><span>{i+1}. {r.area}</span><span>{r.percent}%</span></div><div style={{height:11,background:"#ececf4",borderRadius:20,overflow:"hidden"}}><div style={{width:r.percent+"%",height:"100%",background:i===0?"#625ce7":"#9a96f2"}}/></div></div>)}</div>
-    </div>
-    <h2 style={{fontSize:28,margin:"30px 0 16px"}}>Career paths to explore</h2>
-    <div className="grid">{results.slice(0,3).map(r=>{const c=careers[r.area];return <article className="card" key={r.area}><span className="tag">{r.area}</span><h3 style={{fontSize:23}}>Explore {r.area.toLowerCase()} careers</h3><p className="muted">{c.description}</p><b>Possible roles</b><ul style={{paddingLeft:20,lineHeight:1.8}}>{c.roles.map(role=><li key={role}>{role}</li>)}</ul><b>Useful learning paths</b><p className="muted">{c.courses.join(" · ")}</p></article>})}</div>
-    <div className="card" style={{marginTop:20}}><h3 style={{fontSize:23}}>Explore careers beyond our courses</h3><p className="muted">Your results may point to fields that are not currently taught on CosmoCareer. Research the required qualifications, speak with professionals and try a small project or beginner course before committing.</p><a className="btn primary" href="/courses">Explore CosmoCareer courses</a><button className="btn" style={{marginLeft:10,background:"#f1f2f6",color:"#344054"}} onClick={restart}>Retake test</button></div>
-   </div>}
+  <section className="hero"><div className="container">
+   <span className="tag">COSMOCAREER • CAREER DISCOVERY</span>
+   <h1>Find career directions that fit your interests.</h1>
+   <p>Explore the kinds of activities you enjoy, discover your interest profile and get practical career pathways to investigate.</p>
+   <p style={{fontSize:14,color:"#c7d2fe"}}>36 statements · About 8–12 minutes · No right or wrong answers</p>
   </div></section>
- </main>
+  <section className="section"><div className="container" style={{maxWidth:900}}>
+  {!finished ? <div className="card">
+   <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">CAREER INTEREST INVENTORY</span><b>Section {page+1} of {pageCount}</b></div>
+   <div style={{height:9,background:"#e9eaf5",borderRadius:20,margin:"18px 0 20px",overflow:"hidden"}}><div style={{width:(answered/items.length*100)+"%",height:"100%",background:"#7774f5",borderRadius:20}}/></div>
+   <p className="muted" style={{fontSize:14,marginBottom:18}}>Rate how much you would enjoy each activity. Answer based on your genuine interest, not whether you are already good at it.</p>
+   <div style={{display:"grid",gap:14}}>
+    {current.map((item,offset)=>{const index=start+offset;return <section key={index} style={{padding:"18px 20px",border:"1px solid #e7e8f0",borderRadius:16,background:"#fff"}}>
+     <div style={{fontSize:13,fontWeight:800,color:"#7774f5",marginBottom:8}}>STATEMENT {index+1} OF {items.length}</div>
+     <h2 style={{fontSize:18,lineHeight:1.45,margin:"0 0 14px",fontWeight:750}}>{item.text}</h2>
+     <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:8}}>
+      {scale.map(option=><button key={option.value} type="button" onClick={()=>choose(index,option.value)} aria-pressed={answers[index]===option.value} style={{padding:"12px 9px",borderRadius:10,border:answers[index]===option.value?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[index]===option.value?"#f0efff":"white",color:"#101828",fontSize:13,fontWeight:650,cursor:"pointer"}}>{option.label}</button>)}
+     </div>
+    </section>})}
+   </div>
+   <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24,flexWrap:"wrap"}}>
+    <button type="button" className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={page===0} onClick={()=>setPage(p=>Math.max(0,p-1))}>Previous</button>
+    <button type="button" className="btn primary" disabled={!complete} onClick={()=>{if(!complete)return;if(page===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPage(p=>Math.min(p+1,pageCount-1));window.scrollTo({top:0,behavior:"smooth"})}}}>{page===pageCount-1?"View my career profile":"Next section"}</button>
+   </div>
+   <p className="muted" style={{fontSize:13,marginTop:14}}>{answered} of {items.length} answered · Your answers stay on this page while you move between sections.</p>
+  </div> : <>
+   <div className="card">
+    <span className="tag">YOUR CAREER INTEREST PROFILE</span>
+    <h2 style={{fontSize:34,marginBottom:8}}>Your Holland interest code: {code}</h2>
+    <p className="muted">Your three highest interest areas form a Holland-style RIASEC code. Use it as a conversation starter and a way to explore options, not as a fixed label or a job guarantee.</p>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:12,marginTop:22}}>
+     {results.map((r,i)=><div key={r.type} style={{padding:14,borderRadius:13,background:i<3?"#f0efff":"#f7f7fa",border:i<3?"1px solid #d9d6ff":"1px solid #ececf1"}}>
+      <div style={{fontSize:12,fontWeight:800,color:"#625ce7"}}>{r.type} · {r.name.toUpperCase()}</div><div style={{fontSize:27,fontWeight:850,margin:"5px 0"}}>{r.score}%</div>
+      <div style={{height:7,background:"#e5e5ef",borderRadius:20,overflow:"hidden"}}><div style={{width:r.score+"%",height:"100%",background:i===0?"#625ce7":"#9691ed"}}/></div>
+     </div>)}
+    </div>
+   </div>
+   <h2 style={{fontSize:28,margin:"28px 0 15px"}}>Your top career interest areas</h2>
+   <div style={{display:"grid",gap:14}}>{results.slice(0,3).map((r,i)=><article className="card" key={r.type}>
+    <span className="tag">MATCHING INTEREST {i+1} · {r.name}</span><h3 style={{fontSize:23}}>{r.title}</h3><p className="muted">{r.description}</p>
+    <b>Career directions to explore</b><ul style={{paddingLeft:21,lineHeight:1.8,marginTop:8}}>{r.careers.map(c=><li key={c}>{c}</li>)}</ul>
+    <b>Possible education and skill pathways</b><ul style={{paddingLeft:21,lineHeight:1.8,marginTop:8}}>{r.pathways.map(p=><li key={p}>{p}</li>)}</ul>
+   </article>)}</div>
+   <div className="card" style={{marginTop:18}}>
+    <h3 style={{fontSize:23}}>Explore CosmoCareer learning</h3>
+    <p className="muted">Your interest profile can help you choose what to explore next. Our current courses focus on practical digital and creative skills; they are not a substitute for formal qualifications required in regulated professions.</p>
+    <a className="btn primary" href="/courses">Explore courses</a>
+    <button type="button" className="btn" style={{marginLeft:10,background:"#f1f2f6",color:"#344054"}} onClick={restart}>Retake assessment</button>
+   </div>
+   <div className="card" style={{marginTop:14}}><h3 style={{fontSize:19}}>How to use this result</h3><ol style={{paddingLeft:22,lineHeight:1.8}}><li>Shortlist two or three careers from your top interest areas.</li><li>Check required qualifications, entrance exams and current job descriptions in India.</li><li>Speak with people doing the work and try a small project, course or job-shadowing experience.</li><li>Consider your academic performance, skills, financial situation and preferred lifestyle before deciding.</li></ol><p className="muted" style={{fontSize:13}}>This is an original, exploratory interest questionnaire inspired by the six-area RIASEC framework. It is not the official O*NET Interest Profiler, a clinical or psychometric diagnosis, or a validated predictor of job performance. CosmoCareer has not yet established reliability, validity or Indian population norms for this questionnaire.</p></div>
+  </>}
+  </div></section>
+ </main>;
 }
