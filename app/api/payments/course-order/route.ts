@@ -11,7 +11,7 @@ export async function POST(req:NextRequest){
   const auth=await requireLearner(req);if("error" in auth)return auth.error;
   const body=await req.json().catch(()=>({}));
   const courseId=typeof body.courseId==="string"?body.courseId:"";
-  if(!/^[a-f\\d]{24}$/i.test(courseId))return NextResponse.json({error:"Choose a valid course."},{status:400});
+  if(!/^[a-f\d]{24}$/i.test(courseId))return NextResponse.json({error:"Choose a valid course."},{status:400});
   const course=await Course.findOne({_id:courseId,isPublished:true}).select("_id slug title");
   if(!course||!flagship.includes(course.slug))return NextResponse.json({error:"This course is not available for online checkout."},{status:404});
   const existing=await Enrollment.findOne({studentId:auth.user._id,courseId:course._id,status:"active"}).select("_id");
