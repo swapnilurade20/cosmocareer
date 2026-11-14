@@ -35,6 +35,7 @@ export async function POST(req:NextRequest){
     }
 
     if(signedIn.error||!signedIn.data.user)return NextResponse.json({error:"Unable to verify your account. Please try again."},{status:502});
+    if(user.passwordHash!=="SUPABASE_AUTH_MANAGED"){user.passwordHash="SUPABASE_AUTH_MANAGED";await user.save()}
     const token=await createSession({userId:String(user._id),role:user.role,email:user.email});
     const res=NextResponse.json({user:{id:String(user._id),name:user.name,email:user.email,role:user.role}});
     res.cookies.set(SESSION_COOKIE,token,{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"lax",path:"/",maxAge:604800});
