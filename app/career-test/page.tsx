@@ -108,6 +108,7 @@ export default function CareerTestPage() {
    <p>{t("Explore the kinds of activities you enjoy, discover your interest profile and get practical career pathways to investigate.","जानें कि आपको किस तरह के काम पसंद हैं। अपनी रुचि समझें और उनसे जुड़े करियर के विकल्प खोजें।")}</p>
    <p style={{fontSize:14,color:"#c7d2fe"}}>{t("36 statements · About 8–12 minutes · No right or wrong answers","36 सवाल · लगभग 8–12 मिनट · कोई सही या गलत जवाब नहीं")}</p>
   </div></section>
+  </div>
   <section className="section"><div className="container" style={{maxWidth:900}}>
   {!finished ? <div className="card">
    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">{t("CAREER INTEREST INVENTORY","करियर रुचि टेस्ट")}</span><b>{t("Section","भाग")} {page+1} {t("of","में से")} {pageCount}</b></div>
