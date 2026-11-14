@@ -100,15 +100,13 @@ export default function CareerTestPage() {
  const choose=(index:number,value:number)=>setAnswers(old=>old.map((answer,i)=>i===index?value:answer));
  const restart=()=>{setAnswers(Array(items.length).fill(0));setPage(0);setFinished(false);window.scrollTo({top:0,behavior:"smooth"});};
  return <main>
-  <div style={{position:"relative"}}>
-  <div style={{position:"absolute",top:16,right:20,zIndex:20,display:"flex",alignItems:"center",gap:8,padding:"6px 8px",background:"rgba(255,255,255,0.96)",border:"1px solid #e5e7eb",borderRadius:12,boxShadow:"0 2px 10px rgba(16,24,40,0.08)"}}><span style={{fontSize:13,fontWeight:700,color:"#344054"}}>{t("Language:","भाषा:")}</span><button type="button" onClick={()=>setLanguage("en")} aria-pressed={language==="en"} style={{padding:"7px 11px",borderRadius:8,border:0,background:language==="en"?"#625ce7":"transparent",color:language==="en"?"white":"#344054",fontWeight:700,cursor:"pointer"}}>English</button><button type="button" onClick={()=>setLanguage("hi")} aria-pressed={language==="hi"} style={{padding:"7px 11px",borderRadius:8,border:0,background:language==="hi"?"#625ce7":"transparent",color:language==="hi"?"white":"#344054",fontWeight:700,cursor:"pointer"}}>हिन्दी</button></div>
   <section className="hero"><div className="container">
+   <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",gap:8,flexWrap:"wrap",marginBottom:22,position:"relative",zIndex:1}}><span style={{fontSize:14,fontWeight:700,color:"inherit"}}>{t("Language:","भाषा:")}</span><button type="button" onClick={()=>setLanguage("en")} aria-pressed={language==="en"} style={{padding:"7px 12px",borderRadius:8,border:0,background:language==="en"?"#625ce7":"rgba(255,255,255,0.18)",color:language==="en"?"white":"inherit",fontWeight:700,cursor:"pointer"}}>English</button><button type="button" onClick={()=>setLanguage("hi")} aria-pressed={language==="hi"} style={{padding:"7px 12px",borderRadius:8,border:0,background:language==="hi"?"#625ce7":"rgba(255,255,255,0.18)",color:language==="hi"?"white":"inherit",fontWeight:700,cursor:"pointer"}}>हिन्दी</button></div>
    <span className="tag">{t("COSMOCAREER • CAREER DISCOVERY","COSMOCAREER • करियर की खोज")}</span>
    <h1>{t("Find career directions that fit your interests.","अपनी रुचि के अनुसार करियर के रास्ते खोजें।")}</h1>
    <p>{t("Explore the kinds of activities you enjoy, discover your interest profile and get practical career pathways to investigate.","जानें कि आपको किस तरह के काम पसंद हैं। अपनी रुचि समझें और उनसे जुड़े करियर के विकल्प खोजें।")}</p>
    <p style={{fontSize:14,color:"#c7d2fe"}}>{t("36 statements · About 8–12 minutes · No right or wrong answers","36 सवाल · लगभग 8–12 मिनट · कोई सही या गलत जवाब नहीं")}</p>
   </div></section>
-  </div>
   <section className="section"><div className="container" style={{maxWidth:900}}>
   {!finished ? <div className="card">
    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">{t("CAREER INTEREST INVENTORY","करियर रुचि टेस्ट")}</span><b>{t("Section","भाग")} {page+1} {t("of","में से")} {pageCount}</b></div>
