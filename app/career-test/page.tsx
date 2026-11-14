@@ -85,13 +85,13 @@ export default function CareerTestPage(){
       <div style={{fontSize:13,fontWeight:800,color:"#7774f5",letterSpacing:".04em",marginBottom:10}}>QUESTION {questionIndex+1} OF {questions.length}</div>
       <h2 style={{fontSize:18,lineHeight:1.45,margin:"0 0 16px",fontWeight:750}}>{question.text}</h2>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9}}>
-       {question.options.map((option,i)=><button key={option.area} type="button" onClick={()=>choose(questionIndex,option.area)} aria-pressed={answers[questionIndex]===option.area} style={{textAlign:"left",padding:"13px 14px",borderRadius:11,border:answers[questionIndex]===option.area?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[questionIndex]===option.area?"#f0efff":"white",color:"#101828",fontSize:14,lineHeight:1.5,fontWeight:650,cursor:"pointer"}}><span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:24,height:24,borderRadius:20,background:answers[questionIndex]===option.area?"#7774f5":"#f1f2f6",color:answers[questionIndex]===option.area?"white":"#475467",marginRight:9,fontSize:12}}>{String.fromCharCode(65+i)}</span>{option.label}</button>)}
+       {question.options.map((option,i)=><button key={`${questionIndex}-${i}`} type="button" onClick={()=>choose(questionIndex,option.area)} aria-pressed={answers[questionIndex]===option.area} style={{textAlign:"left",padding:"13px 14px",borderRadius:11,border:answers[questionIndex]===option.area?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[questionIndex]===option.area?"#f0efff":"white",color:"#101828",fontSize:14,lineHeight:1.5,fontWeight:650,cursor:"pointer"}}><span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:24,height:24,borderRadius:20,background:answers[questionIndex]===option.area?"#7774f5":"#f1f2f6",color:answers[questionIndex]===option.area?"white":"#475467",marginRight:9,fontSize:12}}>{String.fromCharCode(65+i)}</span>{option.label}</button>)}
       </div>
      </section>})}
     </div>
     <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24,flexWrap:"wrap"}}>
      <button className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={pageIndex===0} onClick={()=>setPageIndex(i=>i-1)}>Previous page</button>
-     <button className="btn primary" disabled={!pageComplete} onClick={()=>{if(pageIndex===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPageIndex(i=>i+1);window.scrollTo({top:0,behavior:"smooth"})}}}>{pageIndex===pageCount-1?"See my results":"Next page"}</button>
+     <button type="button" className="btn primary" disabled={!pageComplete} onClick={()=>{if(!pageComplete)return;if(pageIndex===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPageIndex(current=>Math.min(current+1,pageCount-1));window.scrollTo({top:0,behavior:"smooth"})}}}>{pageIndex===pageCount-1?"See my results":"Next page"}</button>
     </div>
     <p className="muted" style={{fontSize:13,marginTop:16}}>{answered} of {questions.length} answered · Five questions per page</p>
    </div>:<div>
