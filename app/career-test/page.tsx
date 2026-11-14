@@ -107,12 +107,12 @@ export default function CareerTestPage() {
    <p style={{fontSize:14,color:"#c7d2fe"}}>{t("36 statements · About 8–12 minutes · No right or wrong answers","36 सवाल · लगभग 8–12 मिनट · कोई सही या गलत जवाब नहीं")}</p>
   </div></section>
   <section className="section"><div className="container" style={{maxWidth:900}}>\n{!finished ? <div className="card">
-   <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">{t("CAREER INTEREST INVENTORY","करियर रुचि टेस्ट")}</span><b>Section {page+1} of {pageCount}</b></div>
+   <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">{t("CAREER INTEREST INVENTORY","करियर रुचि टेस्ट")}</span><b>{t("Section","भाग")} {page+1} {t("of","में से")} {pageCount}</b></div>
    <div style={{height:9,background:"#e9eaf5",borderRadius:20,margin:"18px 0 20px",overflow:"hidden"}}><div style={{width:(answered/items.length*100)+"%",height:"100%",background:"#7774f5",borderRadius:20}}/></div>
    <p className="muted" style={{fontSize:14,marginBottom:18}}>{t("Rate how much you would enjoy each activity. Answer based on your genuine interest, not whether you are already good at it.","हर काम के बारे में बताएं कि आपको वह कितना पसंद है। यह न सोचें कि आप उसमें अभी अच्छे हैं या नहीं।")}</p>
    <div style={{display:"grid",gap:14}}>
     {current.map((item,offset)=>{const index=start+offset;return <section key={index} style={{padding:"18px 20px",border:"1px solid #e7e8f0",borderRadius:16,background:"#fff"}}>
-     <div style={{fontSize:13,fontWeight:800,color:"#7774f5",marginBottom:8}}>STATEMENT {index+1} OF {items.length}</div>
+     <div style={{fontSize:13,fontWeight:800,color:"#7774f5",marginBottom:8}}>{t("QUESTION","सवाल")} {index+1} {t("OF","में से")} {items.length}</div>
      <h2 style={{fontSize:18,lineHeight:1.45,margin:"0 0 14px",fontWeight:750}}>{language==="hi"?hiItems[index]:item.text}</h2>
      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:8}}>
       {scale.map(option=><button key={option.value} type="button" onClick={()=>choose(index,option.value)} aria-pressed={answers[index]===option.value} style={{padding:"12px 9px",borderRadius:10,border:answers[index]===option.value?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[index]===option.value?"#f0efff":"white",color:"#101828",fontSize:13,fontWeight:650,cursor:"pointer"}}>{language==="hi"?option.hi:option.label}</button>)}
@@ -121,9 +121,9 @@ export default function CareerTestPage() {
    </div>
    <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24,flexWrap:"wrap"}}>
     <button type="button" className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={page===0} onClick={()=>setPage(p=>Math.max(0,p-1))}>{t("Previous","पिछला")}</button>
-    <button type="button" className="btn primary" disabled={!complete} onClick={()=>{if(!complete)return;if(page===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPage(p=>Math.min(p+1,pageCount-1));window.scrollTo({top:0,behavior:"smooth"})}}}>{page===pageCount-1?"{t("View my career profile","मेरा करियर परिणाम देखें")}":"{t("Next section","अगला भाग")}"}</button>
+    <button type="button" className="btn primary" disabled={!complete} onClick={()=>{if(!complete)return;if(page===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPage(p=>Math.min(p+1,pageCount-1));window.scrollTo({top:0,behavior:"smooth"})}}}>{page===pageCount-1 ? t("View my career profile","मेरा करियर परिणाम देखें") : t("Next section","अगला भाग")}</button>
    </div>
-   <p className="muted" style={{fontSize:13,marginTop:14}}>{answered} of {items.length} answered · {t("Your answers stay on this page while you move between sections.","अगले भाग में जाने पर आपके जवाब सुरक्षित रहेंगे।")}</p>
+   <p className="muted" style={{fontSize:13,marginTop:14}}>{answered} {t("of","में से")} {items.length} {t("answered","जवाब दिए")} · {t("Your answers stay on this page while you move between sections.","अगले भाग में जाने पर आपके जवाब सुरक्षित रहेंगे।")}</p>
   </div> : <>
    <div className="card">
     <span className="tag">{t("YOUR CAREER INTEREST PROFILE","आपकी करियर रुचि")}</span>
