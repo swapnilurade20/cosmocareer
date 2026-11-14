@@ -25,6 +25,18 @@ export function getSupabaseAdmin(){
   return adminClient;
 }
 
+export async function createSupabaseIdentity(email:string,password:string,name:string){
+  const {data,error}=await getSupabaseAdmin().auth.admin.createUser({
+    email,
+    password,
+    email_confirm:true,
+    user_metadata:{name}
+  });
+  if(error)throw error;
+  if(!data.user)throw new Error("Supabase did not return a user.");
+  return data.user;
+}
+
 export async function findSupabaseUserByEmail(email:string){
   const admin=getSupabaseAdmin();
   for(let page=1;page<=20;page++){
