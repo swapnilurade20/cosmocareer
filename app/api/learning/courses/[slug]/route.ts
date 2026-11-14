@@ -1,7 +1,7 @@
 import {NextRequest,NextResponse} from "next/server";
 import {connectDB} from "@/lib/db";
 import Course from "@/models/Course";
-import CourseModule from "@/models/CourseModule";
+import CourseModule,{type ICourseModule,type ILesson} from "@/models/CourseModule";
 import {readSession,SESSION_COOKIE} from "@/lib/session";
 import Enrollment from "@/models/Enrollment";
 import LessonProgress from "@/models/LessonProgress";
@@ -23,7 +23,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
     if(session){
       const activeUser=await User.findOne({_id:session.userId,isActive:true,role:"student"})
         .select("_id")
-        .lean();
+        .lean() as unknown as ICourseModule[];
       if(activeUser){
         const enrollment=await Enrollment.findOne({
           studentId:activeUser._id,
@@ -41,7 +41,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
         }
       }
     }
-    let modules:any[]=[];
+    let modules:ICourseModule[]=[];
     let lessonWarning="";
     try{
       modules=await CourseModule.find({courseId:course._id})
@@ -52,14 +52,14 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{slug:string}
       lessonWarning="Course lessons are being prepared. You can still view course details and enrol.";
       console.error("[GET /api/learning/courses/[slug]] lesson query failed",moduleError);
     }
-    const safeModules=modules.map(m=>({
+    const safeModules=modules.map((m:ICourseModule)=>({
       _id:m._id,
       title:m.title,
       description:m.description,
       order:m.order,
       lessons:(m.lessons||[])
-        .filter(l=>enrolled||l.isPreview)
-        .map(l=>({
+        .filter((l:ILesson)=>enrolled||l.isPreview)
+        .map((l:ILesson)=>({
           _id:l._id,
           title:l.title,
           description:l.description,
