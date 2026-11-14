@@ -32,25 +32,39 @@ const careers:Record<Area,{roles:string[];description:string;courses:string[]}> 
 const scale=["Not at all like me","A little like me","Somewhat like me","Mostly like me","Very much like me"];
 export default function CareerTestPage(){
  const [answers,setAnswers]=useState<number[]>(Array(questions.length).fill(0));
- const [index,setIndex]=useState(0);
+ const [pageIndex,setPageIndex]=useState(0);
+ const pageSize=5;
+ const pageCount=Math.ceil(questions.length/pageSize);
+ const pageStart=pageIndex*pageSize;
+ const pageQuestions=questions.slice(pageStart,pageStart+pageSize);
+ const pageComplete=pageQuestions.every((_,i)=>answers[pageStart+i]>0);
  const [finished,setFinished]=useState(false);
  const answered=answers.filter(Boolean).length;
  const progress=Math.round(answered/questions.length*100);
  const results=useMemo(()=>Object.keys(groups).map(area=>{const key=area as Area;const qs=questions.map((q,i)=>q.area===key?answers[i]:0);const total=qs.reduce((a,b)=>a+b,0);return {area:key,total,max:30,percent:Math.round(total/30*100)}}).sort((a,b)=>b.total-a.total),[answers]);
- const current=questions[index];
- const choose=(value:number)=>setAnswers(old=>old.map((a,i)=>i===index?value:a));
- const restart=()=>{setAnswers(Array(questions.length).fill(0));setIndex(0);setFinished(false)};
+ const choose=(questionIndex:number,value:number)=>setAnswers(old=>old.map((a,i)=>i===questionIndex?value:a));
+ const restart=()=>{setAnswers(Array(questions.length).fill(0));setPageIndex(0);setFinished(false)};
  return <main>
-  <section className="hero"><div className="container"><span className="tag">COSMOCAREER • CAREER DISCOVERY</span><h1>Discover career paths that match your interests.</h1><p>Answer 60 short statements about what you enjoy and how you like to work. Get interest-area results, career ideas and suggested learning paths.</p><p style={{fontSize:14,color:"#c7d2fe"}}>About 10 minutes · 60 questions · No right or wrong answers</p></div></section>
+  <section className="hero"><div className="container"><span className="tag">COSMOCAREER • CAREER DISCOVERY</span><h1>Discover career paths that match your interests.</h1><p>Answer 60 short statements, five at a time, about what you enjoy and how you like to work. Get interest-area results, career ideas and suggested learning paths.</p><p style={{fontSize:14,color:"#c7d2fe"}}>About 10 minutes · 60 questions · 5 questions per page · No right or wrong answers</p></div></section>
   <section className="section"><div className="container" style={{maxWidth:850}}>
    {!finished?<div className="card">
-    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">CAREER INTEREST ASSESSMENT</span><b>Question {index+1} of {questions.length}</b></div>
-    <div style={{height:9,background:"#e9eaf5",borderRadius:20,margin:"18px 0 28px",overflow:"hidden"}}><div style={{width:progress+"%",height:"100%",background:"#7774f5",borderRadius:20}}/></div>
-    <p className="muted">Choose how closely each statement describes you.</p>
-    <h2 style={{fontSize:28,lineHeight:1.35,minHeight:90}}>{current.text}</h2>
-    <div style={{display:"grid",gap:10,marginTop:25}}>{scale.map((label,i)=><button key={label} type="button" onClick={()=>choose(i+1)} aria-pressed={answers[index]===i+1} style={{textAlign:"left",padding:"15px 17px",borderRadius:13,border:answers[index]===i+1?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[index]===i+1?"#f0efff":"white",color:"#101828",fontWeight:700,cursor:"pointer"}}><span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:28,height:28,borderRadius:20,background:answers[index]===i+1?"#7774f5":"#f1f2f6",color:answers[index]===i+1?"white":"#475467",marginRight:12}}>{i+1}</span>{label}</button>)}</div>
-    <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:28}}><button className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={index===0} onClick={()=>setIndex(i=>i-1)}>Previous</button><button className="btn primary" disabled={!answers[index]} onClick={()=>{if(index===questions.length-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else setIndex(i=>i+1)}}>{index===questions.length-1?"See my results":"Next question"}</button></div>
-    <p className="muted" style={{fontSize:13,marginTop:18}}>{answered} of {questions.length} answered · Your answers stay in this browser session and are not submitted to a server. Do not close this tab until you finish.</p>
+    <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",flexWrap:"wrap"}}><span className="tag">CAREER INTEREST ASSESSMENT</span><b>Page {pageIndex+1} of {pageCount}</b></div>
+    <div style={{height:9,background:"#e9eaf5",borderRadius:20,margin:"18px 0 20px",overflow:"hidden"}}><div style={{width:progress+"%",height:"100%",background:"#7774f5",borderRadius:20}}/></div>
+    <p className="muted" style={{fontSize:14,marginBottom:18}}>Answer all five questions on this page. Choose how closely each statement describes you.</p>
+    <div style={{display:"grid",gap:22}}>
+     {pageQuestions.map((question,offset)=>{const questionIndex=pageStart+offset;return <section key={questionIndex} style={{padding:"18px 20px",border:"1px solid #e7e8f0",borderRadius:16,background:"#fff"}}>
+      <div style={{fontSize:13,fontWeight:800,color:"#7774f5",letterSpacing:".04em",marginBottom:10}}>QUESTION {questionIndex+1} OF {questions.length}</div>
+      <h2 style={{fontSize:20,lineHeight:1.45,margin:"0 0 16px",fontWeight:750}}>{question.text}</h2>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:8}}>
+       {scale.map((label,i)=><button key={label} type="button" onClick={()=>choose(questionIndex,i+1)} aria-pressed={answers[questionIndex]===i+1} style={{textAlign:"left",padding:"10px 12px",borderRadius:11,border:answers[questionIndex]===i+1?"2px solid #6965e8":"1px solid #e5e7eb",background:answers[questionIndex]===i+1?"#f0efff":"white",color:"#101828",fontSize:14,lineHeight:1.4,fontWeight:650,cursor:"pointer"}}><span style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:24,height:24,borderRadius:20,background:answers[questionIndex]===i+1?"#7774f5":"#f1f2f6",color:answers[questionIndex]===i+1?"white":"#475467",marginRight:9,fontSize:12}}>{i+1}</span>{label}</button>)}
+      </div>
+     </section>})}
+    </div>
+    <div style={{display:"flex",justifyContent:"space-between",gap:12,marginTop:24,flexWrap:"wrap"}}>
+     <button className="btn" style={{background:"#f1f2f6",color:"#344054"}} disabled={pageIndex===0} onClick={()=>setPageIndex(i=>i-1)}>Previous page</button>
+     <button className="btn primary" disabled={!pageComplete} onClick={()=>{if(pageIndex===pageCount-1){setFinished(true);window.scrollTo({top:0,behavior:"smooth"})}else{setPageIndex(i=>i+1);window.scrollTo({top:0,behavior:"smooth"})}}}>{pageIndex===pageCount-1?"See my results":"Next page"}</button>
+    </div>
+    <p className="muted" style={{fontSize:13,marginTop:16}}>{answered} of {questions.length} answered · Five questions per page</p>
    </div>:<div>
     <div className="card"><span className="tag">YOUR CAREER DISCOVERY RESULTS</span><h2 style={{fontSize:34,marginBottom:8}}>Your strongest interest areas</h2><p className="muted">These results are a starting point for exploration, not a diagnosis, aptitude certification or guarantee of job fit.</p>
      <div style={{display:"grid",gap:17,marginTop:25}}>{results.slice(0,5).map((r,i)=><div key={r.area}><div style={{display:"flex",justifyContent:"space-between",gap:10,fontWeight:800,marginBottom:7}}><span>{i+1}. {r.area}</span><span>{r.percent}%</span></div><div style={{height:11,background:"#ececf4",borderRadius:20,overflow:"hidden"}}><div style={{width:r.percent+"%",height:"100%",background:i===0?"#625ce7":"#9a96f2"}}/></div></div>)}</div>
